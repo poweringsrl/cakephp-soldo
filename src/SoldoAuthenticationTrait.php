@@ -12,8 +12,7 @@ use Soldo\Core\Exception\InvalidEnvironmentException;
 trait SoldoAuthenticationTrait
 {
     use InstanceConfigTrait;
-
-    protected Soldo $Sdk;
+    use WithSoldoSdkTrait;
 
     public function initialize(array $config)
     {
