@@ -21,13 +21,13 @@ trait SoldoBehaviorTrait
         $resource = ucfirst($matches[1]);
 
         $data = isset($options['id'])
-            ? $this->getFromSdk($resource, intval($options['id']))
+            ? $this->getFromSdk($resource, strval($options['id']))
             : $this->getListFromSdk($resource);
 
         return $query->setResult(new Collection(is_array($data) ? $data : [$data]));
     }
 
-    private function getFromSdk(string $resource, int $id)
+    private function getFromSdk(string $resource, string $id)
     {
         $method = 'get' . $resource;
 
@@ -54,12 +54,12 @@ trait SoldoBehaviorTrait
             $results = $this->Sdk->{$method}($page, Paginator::MAX_ALLOWED_ITEMS_PER_PAGE);
 
             if (count($results) === Paginator::MAX_ALLOWED_ITEMS_PER_PAGE) {
-                $results = array_merge($this->getListFromSdk($resource, ++$page, $results), $prev_results);
-            } else {
-                return array_merge($results, $prev_results);
+                $results = $this->getListFromSdk($resource, ++$page, $results);
             }
         } catch (Exception $e) {
             throw new Exception();
         }
+
+        return array_merge($results, $prev_results);
     }
 }

@@ -9,7 +9,7 @@ class TransactionBehavior extends CustomBehavior
 {
     use SoldoBehaviorTrait;
 
-    public function findSoldoWallets(Query $query, array $options)
+    public function findSoldoTransactions(Query $query, array $options)
     {
         return $this->findSoldoResource($query, $options);
     }
