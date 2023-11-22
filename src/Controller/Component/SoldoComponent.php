@@ -2,10 +2,8 @@
 
 namespace Soldo\Controller\Component;
 
-use Cake\Controller\Component;
-use Soldo\Traits\SoldoAuthenticationTrait;
+use Soldo\Controller\CustomComponent;
 
-class SoldoComponent extends Component
+class SoldoComponent extends CustomComponent
 {
-    use SoldoAuthenticationTrait;
 }

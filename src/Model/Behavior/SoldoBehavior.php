@@ -2,10 +2,8 @@
 
 namespace Soldo\Model\Behavior;
 
-use Cake\ORM\Behavior;
-use Soldo\Traits\SoldoAuthenticationTrait;
+use Soldo\ORM\CustomBehavior;
 
-class SoldoBehavior extends Behavior
+class SoldoBehavior extends CustomBehavior
 {
-    use SoldoAuthenticationTrait;
 }

@@ -1,12 +1,15 @@
 <?php
 
-namespace Soldo\Traits;
+namespace Soldo;
 
+use Cake\Core\InstanceConfigTrait;
 use Soldo\Soldo;
 use Exception;
 
 trait SoldoAuthenticationTrait
 {
+    use InstanceConfigTrait;
+
     protected Soldo $Soldo;
 
     protected $_defaultConfig = [
