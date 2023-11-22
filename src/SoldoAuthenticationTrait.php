@@ -12,13 +12,6 @@ trait SoldoAuthenticationTrait
 
     protected Soldo $Soldo;
 
-    protected $_defaultConfig = [
-        'client_id' => null,
-        'client_secret' => null,
-        'token' => null,
-        'environment' => 'demo',
-    ];
-
     public function initialize(array $config)
     {
         $config = $this->getConfig();
