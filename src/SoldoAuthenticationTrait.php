@@ -24,8 +24,8 @@ trait SoldoAuthenticationTrait
         $config = $this->getConfig();
 
         if (
-            empty($actual_config['client_id'])
-            || empty($actual_config['client_secret'])
+            empty($config['client_id'])
+            || empty($config['client_secret'])
         ) {
             throw new Exception();
         }
