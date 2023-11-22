@@ -13,7 +13,7 @@ trait SoldoAuthenticationTrait
 {
     use InstanceConfigTrait;
 
-    protected Soldo $SoldoSdk;
+    protected Soldo $Sdk;
 
     public function initialize(array $config)
     {
@@ -51,7 +51,7 @@ trait SoldoAuthenticationTrait
                 $client->getAccessToken();
             }
 
-            $this->SoldoSdk = new Soldo([
+            $this->Sdk = new Soldo([
                 'client_id' => $client_id,
                 'client_secret' => $client_secret,
                 'environment' => $environment,
