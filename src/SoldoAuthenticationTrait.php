@@ -8,13 +8,12 @@ use Soldo\Authentication\OAuthCredential;
 use Soldo\Core\Exception\EmptyCredentialsException;
 use Soldo\Core\Exception\FailedAuthenticationException;
 use Soldo\Core\Exception\InvalidEnvironmentException;
-use Soldo\Soldo as SoldoSdk;
 
 trait SoldoAuthenticationTrait
 {
     use InstanceConfigTrait;
 
-    protected SoldoSdk $SoldoSdk;
+    protected Soldo $SoldoSdk;
 
     public function initialize(array $config)
     {
