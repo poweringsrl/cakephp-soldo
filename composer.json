@@ -1,0 +1,24 @@
+{
+    "name": "antogno-pw/cakephp-soldo",
+    "description": "Soldo plugin for CakePHP",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "require": {
+        "cakephp/cakephp": "^3.5",
+        "antogno-pw/soldo-php-sdk": "^4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7.14|^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Soldo\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Soldo\\Test\\": "tests/",
+            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
+        }
+    }
+}
