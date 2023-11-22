@@ -5,6 +5,7 @@ namespace Soldo;
 use Cake\Core\InstanceConfigTrait;
 use Soldo\Soldo;
 use Exception;
+use Soldo\Authentication\OAuthCredential;
 
 trait SoldoAuthenticationTrait
 {
@@ -14,6 +15,8 @@ trait SoldoAuthenticationTrait
 
     public function initialize(array $config)
     {
+        $this->setConfig('check_credentials_on_instance', boolval($this->getConfig('check_credentials_on_instance')));
+
         $config = $this->getConfig();
 
         if (
@@ -36,10 +39,20 @@ trait SoldoAuthenticationTrait
     private function authenticate()
     {
         try {
+            $client_id = $this->getConfig('client_id');
+            $client_secret = $this->getConfig('client_secret');
+            $environment = $this->getConfig('environment');
+
+            if ($this->getConfig('check_credentials_on_instance')) {
+                $credential = new OAuthCredential($client_id, $client_secret);
+                $client = new SoldoClient($credential, $environment);
+                $client->getAccessToken();
+            }
+
             $this->Soldo = new Soldo([
-                'client_id' => $this->getConfig('client_id'),
-                'client_secret' => $this->getConfig('client_secret'),
-                'environment' => $this->getConfig('environment'),
+                'client_id' => $client_id,
+                'client_secret' => $client_secret,
+                'environment' => $environment,
             ]);
         } catch (Exception $e) {
             throw new Exception();

@@ -14,5 +14,6 @@ class CustomComponent extends Component
         'client_secret' => null,
         'token' => null,
         'environment' => 'demo',
+        'check_credentials_on_instance' => false,
     ];
 }
