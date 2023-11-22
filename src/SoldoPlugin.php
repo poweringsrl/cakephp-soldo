@@ -4,9 +4,6 @@ namespace Soldo;
 
 use Cake\Core\BasePlugin;
 
-/**
- * Plugin for Soldo
- */
 class SoldoPlugin extends BasePlugin
 {
     protected $bootstrapEnabled = false;

@@ -3,15 +3,15 @@
 namespace Soldo;
 
 use Cake\Core\InstanceConfigTrait;
-use Soldo\Soldo;
 use Exception;
 use Soldo\Authentication\OAuthCredential;
+use Soldo\Soldo as SoldoSdk;
 
 trait SoldoAuthenticationTrait
 {
     use InstanceConfigTrait;
 
-    protected Soldo $Soldo;
+    protected SoldoSdk $SoldoSdk;
 
     public function initialize(array $config)
     {
@@ -49,7 +49,7 @@ trait SoldoAuthenticationTrait
                 $client->getAccessToken();
             }
 
-            $this->Soldo = new Soldo([
+            $this->SoldoSdk = new Soldo([
                 'client_id' => $client_id,
                 'client_secret' => $client_secret,
                 'environment' => $environment,
