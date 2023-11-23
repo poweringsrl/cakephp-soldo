@@ -1,4 +1,5 @@
 .DS_Store
+.env
 /composer.lock
 /phpunit.xml
 config/Migrations/schema-dump-default.lock

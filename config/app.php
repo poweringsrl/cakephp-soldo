@@ -110,7 +110,7 @@ return [
          */
         '_cake_core_' => [
             'className' => FileEngine::class,
-            'prefix' => 'myapp_cake_core_',
+            'prefix' => 'soldo_cake_core_',
             'path' => CACHE . 'persistent/',
             'serialize' => true,
             'duration' => '+1 years',
@@ -125,7 +125,7 @@ return [
          */
         '_cake_model_' => [
             'className' => FileEngine::class,
-            'prefix' => 'myapp_cake_model_',
+            'prefix' => 'soldo_cake_model_',
             'path' => CACHE . 'models/',
             'serialize' => true,
             'duration' => '+1 years',
@@ -139,7 +139,7 @@ return [
          */
         '_cake_routes_' => [
             'className' => FileEngine::class,
-            'prefix' => 'myapp_cake_routes_',
+            'prefix' => 'soldo_cake_routes_',
             'path' => CACHE,
             'serialize' => true,
             'duration' => '+1 years',
