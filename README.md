@@ -15,7 +15,7 @@ Load the plugin in the `config/bootstrap.php` file:
 ```php
 use Cake\Core\Plugin;
 
-Plugin::load('Soldo');
+Plugin::load('Soldo', ['bootstrap' => true]);
 ```
 
 ### Configure the datasource
@@ -29,10 +29,10 @@ return [
         // ...
         'soldo' => [
             'className' => \Muffin\Webservice\Connection::class,
-            'service' => 'Soldo/Soldo.Soldo',
-            'client_id' => '********************************', // replace with the actual client_id
-            'client_secret' => '********************************', // replace with the actual client_secret
-            'environment' => 'production', // 'production' or 'demo'
+            'service' => \Soldo\Webservice\Driver\Soldo::class,
+            'client_id' => '********************************', // Replace with the actual client_id
+            'client_secret' => '********************************', // Replace with the actual client_secret
+            'environment' => 'production', // One of 'production' and 'demo'
         ],
     ],
 ];
@@ -49,6 +49,7 @@ class CardsController extends AppController
 {
     public function initialize()
     {
+        // Instead of 'Cards', any of the Soldo resources (e.g.: 'Wallets', 'Groups', 'Permissions', etc.) can be used
         $this->loadModel('Soldo/Soldo.Cards', 'Endpoint');
     }
 

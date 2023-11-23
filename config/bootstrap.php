@@ -16,6 +16,24 @@
 use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
+
+if (!defined('ROOT')) {
+    define('ROOT', dirname(__DIR__));
+}
+
+if (!defined('TMP')) {
+    define('TMP', ROOT . DS . 'tmp' . DS);
+}
+
+if (!defined('CACHE')) {
+    define('CACHE', TMP . 'cache' . DS);
+}
+
+define('SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY', 'soldo_access_token');
+
 Plugin::load('Muffin/Webservice', ['bootstrap' => true]);
 
 Cache::setConfig(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY, [
