@@ -9,8 +9,8 @@ use Soldo\Http\Client\Adapter\SoldoCurl;
 
 class Soldo extends AbstractDriver
 {
-    protected const API_PRODUCTION_HOST = 'https://api.soldo.com';
-    protected const API_DEMO_HOST = 'https://api-demo.soldocloud.net';
+    protected const API_PRODUCTION_HOST = 'api.soldo.com';
+    protected const API_DEMO_HOST = 'api-demo.soldocloud.net';
     protected const API_ENTRY_POINT = '/business/v2';
     protected const API_AUTHORIZE_PATH = '/oauth/authorize';
 
@@ -27,7 +27,8 @@ class Soldo extends AbstractDriver
             : self::API_DEMO_HOST;
 
         $authorizer = new Client([
-            'host' => $host
+            'host' => $host,
+            'scheme' => 'https',
         ]);
 
         $client_id = $this->getConfig('client_id');
@@ -55,7 +56,8 @@ class Soldo extends AbstractDriver
 
         $this->setClient(new Client([
             'adapter' => $adapter,
-            'host' => $host . self::API_ENTRY_POINT
+            'host' => $host . self::API_ENTRY_POINT,
+            'scheme' => 'https',
         ]));
     }
 }
