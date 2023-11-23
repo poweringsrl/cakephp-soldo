@@ -164,16 +164,16 @@ Security::setSalt(Configure::consume('Security.salt'));
 /*
  * Setup detectors for mobile and tablet.
  */
-ServerRequest::addDetector('mobile', function ($request) {
-    $detector = new \Detection\MobileDetect();
+// ServerRequest::addDetector('mobile', function ($request) {
+//     $detector = new \Detection\MobileDetect();
 
-    return $detector->isMobile();
-});
-ServerRequest::addDetector('tablet', function ($request) {
-    $detector = new \Detection\MobileDetect();
+//     return $detector->isMobile();
+// });
+// ServerRequest::addDetector('tablet', function ($request) {
+//     $detector = new \Detection\MobileDetect();
 
-    return $detector->isTablet();
-});
+//     return $detector->isTablet();
+// });
 
 /*
  * Enable immutable time objects in the ORM.
@@ -183,14 +183,14 @@ ServerRequest::addDetector('tablet', function ($request) {
  * locale specific date formats. For details see
  * @link https://book.cakephp.org/3/en/core-libraries/internationalization-and-localization.html#parsing-localized-datetime-data
  */
-Type::build('time')
-    ->useImmutable();
-Type::build('date')
-    ->useImmutable();
-Type::build('datetime')
-    ->useImmutable();
-Type::build('timestamp')
-    ->useImmutable();
+// Type::build('time')
+//     ->useImmutable();
+// Type::build('date')
+//     ->useImmutable();
+// Type::build('datetime')
+//     ->useImmutable();
+// Type::build('timestamp')
+//     ->useImmutable();
 
 /*
  * Custom Inflector rules, can be set to correctly pluralize or singularize

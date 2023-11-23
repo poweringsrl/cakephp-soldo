@@ -48,7 +48,7 @@ return [
      *   paths for plugins, view templates and locale files respectively.
      */
     'App' => [
-        'namespace' => 'App',
+        'namespace' => 'Soldo',
         'encoding' => env('APP_ENCODING', 'UTF-8'),
         'defaultLocale' => env('APP_DEFAULT_LOCALE', 'en_US'),
         'defaultTimezone' => env('APP_DEFAULT_TIMEZONE', 'UTC'),
@@ -204,24 +204,24 @@ return [
      * 'YourTransport.php', where 'Your' is the name of the transport.
      */
     'EmailTransport' => [
-        'default' => [
-            'className' => MailTransport::class,
-            /*
-             * The keys host, port, timeout, username, password, client and tls
-             * are used in SMTP transports
-             */
-            'host' => 'localhost',
-            'port' => 25,
-            'timeout' => 30,
-            /*
-             * It is recommended to set these options through your environment or app_local.php
-             */
-            //'username' => null,
-            //'password' => null,
-            'client' => null,
-            'tls' => false,
-            'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
-        ],
+        // 'default' => [
+        //     'className' => MailTransport::class,
+        //     /*
+        //      * The keys host, port, timeout, username, password, client and tls
+        //      * are used in SMTP transports
+        //      */
+        //     'host' => 'localhost',
+        //     'port' => 25,
+        //     'timeout' => 30,
+        //     /*
+        //      * It is recommended to set these options through your environment or app_local.php
+        //      */
+        //     //'username' => null,
+        //     //'password' => null,
+        //     'client' => null,
+        //     'tls' => false,
+        //     'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+        // ],
     ],
 
     /*
@@ -234,15 +234,15 @@ return [
      * for more information.
      */
     'Email' => [
-        'default' => [
-            'transport' => 'default',
-            'from' => 'you@localhost',
-            /*
-             * Will by default be set to config value of App.encoding, if that exists otherwise to UTF-8.
-             */
-            //'charset' => 'utf-8',
-            //'headerCharset' => 'utf-8',
-        ],
+        // 'default' => [
+        //     'transport' => 'default',
+        //     'from' => 'you@localhost',
+        //     /*
+        //      * Will by default be set to config value of App.encoding, if that exists otherwise to UTF-8.
+        //      */
+        //     //'charset' => 'utf-8',
+        //     //'headerCharset' => 'utf-8',
+        // ],
     ],
 
     /*
@@ -259,104 +259,104 @@ return [
      *   other RDBMS.
      */
     'Datasources' => [
-        'default' => [
-            'className' => Connection::class,
-            'driver' => Mysql::class,
-            'persistent' => false,
-            'host' => 'localhost',
-            /*
-             * CakePHP will use the default DB port based on the driver selected
-             * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
-             * the following line and set the port accordingly
-             */
-            //'port' => 'non_standard_port_number',
-            /*
-             * It is recommended to set these options through your environment or app_local.php
-             */
-            //'username' => 'my_app',
-            //'password' => 'secret',
-            //'database' => 'my_app',
-            /*
-             * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
-             */
-            //'encoding' => 'utf8mb4',
-            'timezone' => 'UTC',
-            'flags' => [],
-            'cacheMetadata' => true,
-            'log' => false,
+        // 'default' => [
+        //     'className' => Connection::class,
+        //     'driver' => Mysql::class,
+        //     'persistent' => false,
+        //     'host' => 'localhost',
+        //     /*
+        //      * CakePHP will use the default DB port based on the driver selected
+        //      * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
+        //      * the following line and set the port accordingly
+        //      */
+        //     //'port' => 'non_standard_port_number',
+        //     /*
+        //      * It is recommended to set these options through your environment or app_local.php
+        //      */
+        //     //'username' => 'my_app',
+        //     //'password' => 'secret',
+        //     //'database' => 'my_app',
+        //     /*
+        //      * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
+        //      */
+        //     //'encoding' => 'utf8mb4',
+        //     'timezone' => 'UTC',
+        //     'flags' => [],
+        //     'cacheMetadata' => true,
+        //     'log' => false,
 
-            /*
-             * Set identifier quoting to true if you are using reserved words or
-             * special characters in your table or column names. Enabling this
-             * setting will result in queries built using the Query Builder having
-             * identifiers quoted when creating SQL. It should be noted that this
-             * decreases performance because each query needs to be traversed and
-             * manipulated before being executed.
-             */
-            'quoteIdentifiers' => false,
+        //     /*
+        //      * Set identifier quoting to true if you are using reserved words or
+        //      * special characters in your table or column names. Enabling this
+        //      * setting will result in queries built using the Query Builder having
+        //      * identifiers quoted when creating SQL. It should be noted that this
+        //      * decreases performance because each query needs to be traversed and
+        //      * manipulated before being executed.
+        //      */
+        //     'quoteIdentifiers' => false,
 
-            /*
-             * During development, if using MySQL < 5.6, uncommenting the
-             * following line could boost the speed at which schema metadata is
-             * fetched from the database. It can also be set directly with the
-             * mysql configuration directive 'innodb_stats_on_metadata = 0'
-             * which is the recommended value in production environments
-             */
-            //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
+        //     /*
+        //      * During development, if using MySQL < 5.6, uncommenting the
+        //      * following line could boost the speed at which schema metadata is
+        //      * fetched from the database. It can also be set directly with the
+        //      * mysql configuration directive 'innodb_stats_on_metadata = 0'
+        //      * which is the recommended value in production environments
+        //      */
+        //     //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
 
-            'url' => env('DATABASE_URL', null),
-        ],
+        //     'url' => env('DATABASE_URL', null),
+        // ],
 
-        /*
-         * The test connection is used during the test suite.
-         */
-        'test' => [
-            'className' => Connection::class,
-            'driver' => Mysql::class,
-            'persistent' => false,
-            'host' => 'localhost',
-            //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'test_myapp',
-            //'encoding' => 'utf8mb4',
-            'timezone' => 'UTC',
-            'cacheMetadata' => true,
-            'quoteIdentifiers' => false,
-            'log' => false,
-            //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
-            'url' => env('DATABASE_TEST_URL', null),
-        ],
+        // /*
+        //  * The test connection is used during the test suite.
+        //  */
+        // 'test' => [
+        //     'className' => Connection::class,
+        //     'driver' => Mysql::class,
+        //     'persistent' => false,
+        //     'host' => 'localhost',
+        //     //'port' => 'non_standard_port_number',
+        //     'username' => 'my_app',
+        //     'password' => 'secret',
+        //     'database' => 'test_myapp',
+        //     //'encoding' => 'utf8mb4',
+        //     'timezone' => 'UTC',
+        //     'cacheMetadata' => true,
+        //     'quoteIdentifiers' => false,
+        //     'log' => false,
+        //     //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
+        //     'url' => env('DATABASE_TEST_URL', null),
+        // ],
     ],
 
     /*
      * Configures logging options
      */
     'Log' => [
-        'debug' => [
-            'className' => FileLog::class,
-            'path' => LOGS,
-            'file' => 'debug',
-            'url' => env('LOG_DEBUG_URL', null),
-            'scopes' => false,
-            'levels' => ['notice', 'info', 'debug'],
-        ],
-        'error' => [
-            'className' => FileLog::class,
-            'path' => LOGS,
-            'file' => 'error',
-            'url' => env('LOG_ERROR_URL', null),
-            'scopes' => false,
-            'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
-        ],
-        // To enable this dedicated query log, you need set your datasource's log flag to true
-        'queries' => [
-            'className' => FileLog::class,
-            'path' => LOGS,
-            'file' => 'queries',
-            'url' => env('LOG_QUERIES_URL', null),
-            'scopes' => ['queriesLog'],
-        ],
+        // 'debug' => [
+        //     'className' => FileLog::class,
+        //     'path' => LOGS,
+        //     'file' => 'debug',
+        //     'url' => env('LOG_DEBUG_URL', null),
+        //     'scopes' => false,
+        //     'levels' => ['notice', 'info', 'debug'],
+        // ],
+        // 'error' => [
+        //     'className' => FileLog::class,
+        //     'path' => LOGS,
+        //     'file' => 'error',
+        //     'url' => env('LOG_ERROR_URL', null),
+        //     'scopes' => false,
+        //     'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
+        // ],
+        // // To enable this dedicated query log, you need set your datasource's log flag to true
+        // 'queries' => [
+        //     'className' => FileLog::class,
+        //     'path' => LOGS,
+        //     'file' => 'queries',
+        //     'url' => env('LOG_QUERIES_URL', null),
+        //     'scopes' => ['queriesLog'],
+        // ],
     ],
 
     /*

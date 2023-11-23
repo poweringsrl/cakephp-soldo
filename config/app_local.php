@@ -35,20 +35,20 @@ return [
      * See app.php for more configuration options.
      */
     'Datasources' => [
-        'default' => [
-            'host' => 'localhost',
-            /*
-             * CakePHP will use the default DB port based on the driver selected
-             * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
-             * the following line and set the port accordingly
-             */
-            //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'my_app',
-            'log' => true,
-            'url' => env('DATABASE_URL', null),
-        ],
+        // 'default' => [
+        //     'host' => 'localhost',
+        //     /*
+        //      * CakePHP will use the default DB port based on the driver selected
+        //      * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
+        //      * the following line and set the port accordingly
+        //      */
+        //     //'port' => 'non_standard_port_number',
+        //     'username' => 'my_app',
+        //     'password' => 'secret',
+        //     'database' => 'my_app',
+        //     'log' => true,
+        //     'url' => env('DATABASE_URL', null),
+        // ],
     ],
 
     /*
@@ -59,13 +59,13 @@ return [
      * See app.php for more configuration options.
      */
     'EmailTransport' => [
-        'default' => [
-            'host' => 'localhost',
-            'port' => 25,
-            'username' => null,
-            'password' => null,
-            'client' => null,
-            'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
-        ],
+        // 'default' => [
+        //     'host' => 'localhost',
+        //     'port' => 25,
+        //     'username' => null,
+        //     'password' => null,
+        //     'client' => null,
+        //     'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+        // ],
     ],
 ];

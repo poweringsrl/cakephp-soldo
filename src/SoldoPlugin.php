@@ -6,7 +6,7 @@ use Cake\Core\BasePlugin;
 
 class SoldoPlugin extends BasePlugin
 {
-    protected $bootstrapEnabled = false;
+    protected $bootstrapEnabled = true;
 
     protected $routesEnabled = false;
 
