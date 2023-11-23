@@ -5,6 +5,7 @@ namespace Soldo\Model\Behavior;
 use Cake\Collection\Collection;
 use Cake\ORM\Query;
 use Exception;
+use Soldo\Resources\Resource;
 use Soldo\Utils\Paginator;
 use Soldo\WithSoldoSdkTrait;
 
@@ -20,11 +21,15 @@ trait SoldoBehaviorTrait
 
         $resource = ucfirst($matches[1]);
 
-        $data = isset($options['id'])
-            ? $this->getFromSdk($resource, strval($options['id']))
-            : $this->getListFromSdk($resource);
+        if (isset($options['id'])) {
+            $items = [$this->getFromSdk($resource, strval($options['id']))];
+        } else {
+            $items = $this->getListFromSdk($resource);
+        }
 
-        return $query->setResult(new Collection(is_array($data) ? $data : [$data]));
+        return $query->setResult(new Collection(array_map(function (Resource $item) {
+            return $item;
+        }, $items)));
     }
 
     private function getFromSdk(string $resource, string $id)

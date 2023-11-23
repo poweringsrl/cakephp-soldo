@@ -3,9 +3,9 @@
 namespace Soldo\Model\Behavior;
 
 use Cake\ORM\Query;
-use Soldo\ORM\CustomBehavior;
+use Soldo\ORM\SoldoBehavior;
 
-class WalletBehavior extends CustomBehavior
+class WalletBehavior extends SoldoBehavior
 {
     use SoldoBehaviorTrait;
 
