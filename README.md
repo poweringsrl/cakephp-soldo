@@ -15,7 +15,7 @@ Load the plugin in the `config/bootstrap.php` file:
 ```php
 use Cake\Core\Plugin;
 
-Plugin::load('Muffin/Webservice', ['bootstrap' => true]);
+Plugin::load('Soldo');
 ```
 
 ### Configure the datasource
@@ -27,14 +27,14 @@ return [
     // ...
     'Datasources' => [
         // ...
-        'cards' => [
+        'soldo' => [
             'className' => \Muffin\Webservice\Connection::class,
-            'service' => \Soldo\Webservice\Driver\Soldo::class,
+            'service' => 'Soldo/Soldo.Soldo',
             'client_id' => '********************************', // replace with the actual client_id
             'client_secret' => '********************************', // replace with the actual client_secret
-            'environment' => 'production' // 'production' or 'demo'
-        ]
-    ]
+            'environment' => 'production', // 'production' or 'demo'
+        ],
+    ],
 ];
 ```
 
@@ -45,17 +45,18 @@ namespace App\Controller;
 
 use Cake\Event\Event;
 
-class FooController extends AppController
+class CardsController extends AppController
 {
     public function initialize()
     {
-        // ...
-        $this->loadModel('Soldo/Cards.Cards', 'Endpoint');
+        $this->loadModel('Soldo/Soldo.Cards', 'Endpoint');
     }
 
     public function index()
     {
-        $cards = $this->Cards->find()->toArray();
+        $cards = $this->Cards->find()->where([
+            // ...
+        ]);
 
         $this->set('cards', $cards);
     }

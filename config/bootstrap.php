@@ -13,7 +13,13 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
-
+use Cake\Cache\Cache;
 use Cake\Core\Plugin;
 
-Plugin::load('Muffin/Webservice');
+Plugin::load('Muffin/Webservice', ['bootstrap' => true]);
+
+Cache::setConfig(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY, [
+    'className' => 'File',
+    'duration' => '+7200 seconds',
+    'path' => CACHE,
+]);
