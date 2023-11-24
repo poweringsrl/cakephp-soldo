@@ -3,6 +3,7 @@
 namespace Soldo\Model\Endpoint;
 
 use Muffin\Webservice\Model\Endpoint;
+use Soldo\Model\Schema\CardSchema;
 
 class CardsEndpoint extends Endpoint
 {
@@ -12,5 +13,7 @@ class CardsEndpoint extends Endpoint
 
         $this->setPrimaryKey('id');
         $this->setDisplayField('name');
+
+        $this->setSchema(new CardSchema(null));
     }
 }

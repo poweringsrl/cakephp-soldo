@@ -40,7 +40,7 @@ class SoldoWebservice extends Webservice
         // In CakePHP pages are expected to start from 1, while Soldo expect pages starting from 0
         $page = ($query->clause('page') ?? 1) - 1;
 
-        $all = $limit && $limit > self::MAX_ITEMS_PER_PAGE;
+        $all = !$limit || $limit > self::MAX_ITEMS_PER_PAGE;
 
         $json = $all
             ? $this->_sendRequest($parameters, $all)

@@ -30,9 +30,9 @@ return [
         'soldo' => [
             'className' => \Muffin\Webservice\Connection::class,
             'service' => \Soldo\Webservice\Driver\Soldo::class,
-            'client_id' => '********************************', // Replace with the actual client_id
-            'client_secret' => '********************************', // Replace with the actual client_secret
-            'environment' => 'production', // One of 'production' and 'demo'
+            'client_id' => '', // Replace with the actual client_id
+            'client_secret' => '', // Replace with the actual client_secret
+            'environment' => 'production', // One of 'production' or 'demo'
         ],
     ],
 ];
@@ -45,6 +45,11 @@ namespace App\Controller;
 
 use Cake\Event\Event;
 
+/**
+ * ...
+ *
+ * @property \Muffin\Webservice\Model\Endpoint $Cards
+ */
 class CardsController extends AppController
 {
     public function initialize()
@@ -64,7 +69,10 @@ class CardsController extends AppController
             ->order(['name' => 'DESC'])
             ->limit(10);
 
+        $card = $this->Cards->get('ef12ee12-5cfa-4175-b7e6-665d112aea0e');
+
         $this->set('cards', $cards);
+        $this->set('card', $card);
     }
 }
 ```
