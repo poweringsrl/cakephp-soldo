@@ -43,10 +43,10 @@ class SoldoWebservice extends Webservice
         $all = !$limit || $limit > self::MAX_ITEMS_PER_PAGE;
 
         $json = $all
-            ? $this->_sendRequest($parameters, $all)
-            : $this->_sendRequest($parameters, $all, $page, $limit);
+            ? $this->_sendRequest($query, $parameters, $all)
+            : $this->_sendRequest($query, $parameters, $all, $page, $limit);
 
-        $resources = $this->_transformResults($query->endpoint(), isset($json['results']) ? $json['results'] : $json);
+        $resources = $this->_transformResults($query->endpoint(), isset($json['results']) ? $json['results'] : [$json]);
         $resources = is_array($resources) ? $resources : [$resources];
 
         return new ResultSet($all ? $this->_filterResults($query, $resources) : $resources, count($resources));
@@ -57,9 +57,15 @@ class SoldoWebservice extends Webservice
         return '/' . trim(static::API_ENTRY_POINT, '/') . '/' . $this->getEndpoint();
     }
 
-    protected function _sendRequest(array $parameters, bool $all = false, int $page = 0, int $limit = self::MAX_ITEMS_PER_PAGE, array $prev_json = [])
+    protected function _sendRequest(Query $query, array $parameters, bool $all = false, int $page = 0, int $limit = self::MAX_ITEMS_PER_PAGE, array $prev_json = [])
     {
         $url = $this->_baseUrl();
+
+        $primary_key = $query->endpoint()->getPrimaryKey();
+        if ($primary_key && isset($parameters[$primary_key])) {
+            $url .= '/' . $parameters[$primary_key];
+            unset($parameters[$primary_key]);
+        }
 
         $parameters['p'] = $page;
         $parameters['s'] = $all ? self::MAX_ITEMS_PER_PAGE : $limit;
@@ -78,7 +84,7 @@ class SoldoWebservice extends Webservice
 
         if (isset($json['results'])) {
             if ($all && count($json['results']) === self::MAX_ITEMS_PER_PAGE) {
-                $json = $this->_sendRequest($parameters, $all, ++$page, $limit, $json);
+                $json = $this->_sendRequest($query, $parameters, $all, ++$page, $limit, $json);
             }
 
             $json['results'] = array_merge($prev_json['results'] ?? [], $json['results']);

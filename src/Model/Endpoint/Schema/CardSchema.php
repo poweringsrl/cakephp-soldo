@@ -1,6 +1,6 @@
 <?php
 
-namespace Soldo\Model\Schema;
+namespace Soldo\Model\Endpoint\Schema;
 
 use Muffin\Webservice\Model\Schema;
 
@@ -11,7 +11,7 @@ class CardSchema extends Schema
         parent::initialize();
 
         $this->addColumn('id', [
-            'type' => 'integer',
+            'type' => 'string',
             'primaryKey' => true
         ]);
         $this->addColumn('name', [
