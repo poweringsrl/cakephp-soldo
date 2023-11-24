@@ -6,11 +6,11 @@ use Muffin\Webservice\Model\Endpoint;
 
 class CardsEndpoint extends Endpoint
 {
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+	public function initialize(array $config)
+	{
+		parent::initialize($config);
 
-        $this->setPrimaryKey('id');
-        $this->setDisplayField('name');
-    }
+		$this->setPrimaryKey('id');
+		$this->setDisplayField('name');
+	}
 }

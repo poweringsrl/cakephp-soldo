@@ -6,11 +6,11 @@ use Muffin\Webservice\Model\Endpoint;
 
 class RolesEndpoint extends Endpoint
 {
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+	public function initialize(array $config)
+	{
+		parent::initialize($config);
 
-        $this->setPrimaryKey('name');
-        $this->setDisplayField('description');
-    }
+		$this->setPrimaryKey('name');
+		$this->setDisplayField('description');
+	}
 }

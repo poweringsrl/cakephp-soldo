@@ -1,0 +1,21 @@
+{
+  "name": "cakephp-soldo",
+  "version": "1.0.0",
+  "description": "Soldo plugin for CakePHP",
+  "scripts": {
+    "format": "prettier src/ --write --print-width=120 --tab-width=4 --use-tabs=true --single-quote=true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/antognoPW/cakephp-soldo.git"
+  },
+  "author": {
+    "name": "Antonio Granaldi",
+    "email": "a.granaldi@poweringsrl.it"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@prettier/plugin-php": "^0.21.0",
+    "prettier": "^3.1.0"
+  }
+}

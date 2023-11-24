@@ -1,6 +1,8 @@
 .DS_Store
 .env
-/composer.lock
 /phpunit.xml
+composer.lock
 config/Migrations/schema-dump-default.lock
+node_modules
+package-lock.json
 vendor

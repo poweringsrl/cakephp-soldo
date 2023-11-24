@@ -6,11 +6,11 @@ use Muffin\Webservice\Model\Endpoint;
 
 class VehiclesEndpoint extends Endpoint
 {
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+	public function initialize(array $config)
+	{
+		parent::initialize($config);
 
-        $this->setPrimaryKey('id');
-        $this->setDisplayField('description');
-    }
+		$this->setPrimaryKey('id');
+		$this->setDisplayField('description');
+	}
 }
