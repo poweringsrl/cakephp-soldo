@@ -5,7 +5,7 @@ namespace Soldo\Model\Endpoint\Schema;
 use Cake\Database\Schema\TableSchemaInterface;
 use Muffin\Webservice\Model\Schema;
 
-class CardSchema extends Schema
+class SubscriptionSchema extends Schema
 {
     public function initialize()
     {
@@ -18,40 +18,25 @@ class CardSchema extends Schema
         $this->addColumn('name', [
             'type' => TableSchemaInterface::TYPE_STRING,
         ]);
-        $this->addColumn('masked_pan', [
+        $this->addColumn('description', [
             'type' => TableSchemaInterface::TYPE_STRING,
         ]);
-        $this->addColumn('expiration_date', [
-            'type' => TableSchemaInterface::TYPE_STRING,
-        ]);
-        $this->addColumn('creation_time', [
-            'type' => TableSchemaInterface::TYPE_STRING,
-        ]);
-        $this->addColumn('last_update', [
-            'type' => TableSchemaInterface::TYPE_STRING,
-        ]);
-        $this->addColumn('type', [
+        $this->addColumn('platform', [
             'type' => TableSchemaInterface::TYPE_STRING,
         ]);
         $this->addColumn('status', [
             'type' => TableSchemaInterface::TYPE_STRING,
         ]);
-        $this->addColumn('owner_type', [
-            'type' => TableSchemaInterface::TYPE_STRING,
-        ]);
         $this->addColumn('wallet_id', [
+            'type' => TableSchemaInterface::TYPE_UUID,
+        ]);
+        $this->addColumn('payment_frequency', [
             'type' => TableSchemaInterface::TYPE_STRING,
         ]);
-        $this->addColumn('currency_code', [
+        $this->addColumn('creation_time', [
             'type' => TableSchemaInterface::TYPE_STRING,
         ]);
-        $this->addColumn('emboss_line4', [
-            'type' => TableSchemaInterface::TYPE_STRING,
-        ]);
-        $this->addColumn('active', [
-            'type' => TableSchemaInterface::TYPE_BOOLEAN,
-        ]);
-        $this->addColumn('method3ds', [
+        $this->addColumn('last_update_time', [
             'type' => TableSchemaInterface::TYPE_STRING,
         ]);
     }

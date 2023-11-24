@@ -2,6 +2,7 @@
 
 namespace Soldo\Webservice;
 
+use Cake\Http\Client\Message;
 use Exception;
 use Muffin\Webservice\Query;
 use Muffin\Webservice\ResultSet;
@@ -74,8 +75,10 @@ class SoldoWebservice extends Webservice
 
         $json = $response->getJson();
 
-        if (isset($json['error_code'])) {
-            throw new Exception($json['message']);
+        if ($response->getStatusCode() !== Message::STATUS_OK) {
+            if (isset($json['error_code']) || isset($json['error'])) {
+                throw new Exception($json['message'] ?? ($json['error_description'] ?? ''));
+            }
         }
 
         if (!$response->isOk()) {

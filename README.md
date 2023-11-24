@@ -20,7 +20,7 @@ Plugin::load('Soldo', ['bootstrap' => true]);
 
 ### Configure the datasource
 
-Add the following to the "Datasources" item in the `config/app.php` file:
+Add the following to the _Datasources_ item in the `config/app.php` file:
 
 ```php
 return [
@@ -40,6 +40,22 @@ return [
 
 ## Usage
 
+The following code shows an example for the _Card_ resource, but any of the Soldo resources can be used.
+
+In detail, the following resources are currently supported:
+
+- [Addresses](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#addresses);
+- [Cards](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#cards);
+  <!-- - [Company](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#company); -->
+- [Employees](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#users);
+- [Groups](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#groups);
+- [Orders](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#orders);
+- [Roles](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#permissions);
+- [Subscription](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#subscriptions);
+  <!-- - [Transaction](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#transactions); -->
+- [Vehicles](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#vehicles);
+- [Wallets](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#wallets).
+
 ```php
 namespace App\Controller;
 
@@ -54,7 +70,6 @@ class CardsController extends AppController
 {
     public function initialize()
     {
-        // Instead of 'Cards', any of the Soldo resources (e.g.: 'Wallets', 'Groups', 'Permissions', etc.) can be used
         $this->loadModel('Soldo/Soldo.Cards', 'Endpoint');
     }
 
@@ -63,8 +78,8 @@ class CardsController extends AppController
         $cards = $this->Cards->find()
             // GET parameters as expected from Soldo for this resource
             ->where([
-                'name' => 'Foo',
-                'status' => 'Normal',
+                'type' => 'wallet',
+                'customreferenceId' => '1368e647-842b-4d17-9a1a-2ad225e6dc1a'
             ])
             ->order(['name' => 'DESC'])
             ->limit(10);
@@ -76,3 +91,5 @@ class CardsController extends AppController
     }
 }
 ```
+
+> **Note**: Only read queries are currently supported.
