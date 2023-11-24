@@ -64,7 +64,7 @@ use Cake\Event\Event;
 /**
  * ...
  *
- * @property \Muffin\Webservice\Model\Endpoint $Cards
+ * @property \Soldo\Model\Endpoint\CardsEndpoint $Cards
  */
 class CardsController extends AppController
 {
