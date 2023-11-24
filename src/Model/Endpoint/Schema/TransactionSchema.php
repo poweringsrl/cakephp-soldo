@@ -5,7 +5,7 @@ namespace Soldo\Model\Endpoint\Schema;
 use Cake\Database\Schema\TableSchemaInterface;
 use Muffin\Webservice\Model\Schema;
 
-class SubscriptionSchema extends Schema
+class TransactionSchema extends Schema
 {
     public function initialize()
     {

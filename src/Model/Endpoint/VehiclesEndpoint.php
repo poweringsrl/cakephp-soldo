@@ -4,7 +4,7 @@ namespace Soldo\Model\Endpoint;
 
 use Muffin\Webservice\Model\Endpoint;
 
-class OrdersEndpoint extends Endpoint
+class VehiclesEndpoint extends Endpoint
 {
     public function initialize(array $config)
     {
