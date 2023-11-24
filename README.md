@@ -55,9 +55,14 @@ class CardsController extends AppController
 
     public function index()
     {
-        $cards = $this->Cards->find()->where([
-            // ...
-        ]);
+        $cards = $this->Cards->find()
+            // GET parameters as expected from Soldo for this resource
+            ->where([
+                'name' => 'Foo',
+                'status' => 'Normal',
+            ])
+            ->order(['name' => 'DESC'])
+            ->limit(10);
 
         $this->set('cards', $cards);
     }
