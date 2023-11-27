@@ -43,12 +43,14 @@ class Soldo extends AbstractDriver
 
 	protected function getAccessToken()
 	{
-		if (Cache::read(self::ACCESS_TOKEN_CACHE_KEY) !== false) {
-			return Cache::read(self::ACCESS_TOKEN_CACHE_KEY);
-		}
-
 		$client_id = $this->getConfig('client_id');
 		$client_secret = $this->getConfig('client_secret');
+
+		$access_token_cache_key = self::ACCESS_TOKEN_CACHE_KEY . '_' . sha1($client_id . $client_secret);
+
+		if (Cache::read($access_token_cache_key) !== false) {
+			return Cache::read($access_token_cache_key);
+		}
 
 		if (empty($client_id) || empty($client_secret)) {
 			throw new Exception();
@@ -87,7 +89,7 @@ class Soldo extends AbstractDriver
 		$engine = Cache::engine(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY);
 		$engine->setConfig(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY, '+' . $expiration . ' seconds');
 
-		Cache::write(self::ACCESS_TOKEN_CACHE_KEY, $token, SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY);
+		Cache::write($access_token_cache_key, $token, SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY);
 
 		return $token;
 	}
