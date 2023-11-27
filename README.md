@@ -82,6 +82,10 @@ class CardsController extends AppController
     public function index()
     {
         $cards = $this->Cards->find()
+            ->select([
+                'id',
+                'number' => 'masked_pan'
+            ])
             // GET parameters as expected from Soldo for this resource
             ->where([
                 'type' => 'wallet',

@@ -51,10 +51,34 @@ class SoldoWebservice extends Webservice
 			? $this->_sendRequest($query, $parameters, $all)
 			: $this->_sendRequest($query, $parameters, $all, $page, $limit);
 
-		$resources = $this->_transformResults($query->endpoint(), isset($json['results']) ? $json['results'] : [$json]);
-		$resources = is_array($resources) ? $resources : [$resources];
+		$results = isset($json['results']) ? $json['results'] : [$json];
 
-		return new ResultSet($all ? $this->_filterResults($query, $resources) : $resources, count($resources));
+		if ($query->clause('select')) {
+			$fields = $query->clause('select');
+
+			if (is_array($fields)) {
+				if (!empty(array_filter($fields))) {
+					$results = array_map(function ($item) use ($fields) {
+						return array_reduce(array_keys($fields), function ($acc, $new_key) use ($item, $fields) {
+							$old_key = $fields[$new_key];
+
+							if (!isset($item[$old_key])) {
+								throw new Exception();
+							}
+
+							$acc[!is_int($new_key) ? $new_key : $old_key] = $item[$old_key];
+							return $acc;
+						}, []);
+					}, $results);
+				}
+			}
+		}
+
+		$resources = $this->_transformResults($query->endpoint(), $results);
+		$resources = is_array($resources) ? $resources : [$resources];
+		$resources = $all ? $this->_paginateResults($query, $resources) : $resources;
+
+		return new ResultSet($resources, count($resources));
 	}
 
 	protected function _baseUrl()
@@ -108,7 +132,7 @@ class SoldoWebservice extends Webservice
 		return $json;
 	}
 
-	protected function _filterResults(Query $query, array $results)
+	protected function _paginateResults(Query $query, array $results)
 	{
 		$limit = $query->clause('limit');
 		$page = $query->clause('page') ?? 1;
