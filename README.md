@@ -1,5 +1,11 @@
 # Soldo plugin for CakePHP
 
+<p>
+	<a href="https://gitlab.com/antognoPW/cakephp-soldo/blob/master/LICENSE"><img src="https://img.shields.io/gitlab/license/antognoPW/cakephp-soldo" alt="License"></a>
+	<a href="https://gitlab.com/antognoPW/cakephp-soldo/commits"><img src="https://img.shields.io/gitlab/last-commit/antognoPW/cakephp-soldo" alt="Last commit"></a>
+	<a href="https://gitlab.com/antognoPW/cakephp-soldo/releases/latest"><img src="https://img.shields.io/gitlab/v/tag/antognoPW/cakephp-soldo?label=last%20release" alt="Last release"></a>
+</p>
+
 ## Installation
 
 You can install this plugin into your CakePHP application using [composer](https://getcomposer.org):
@@ -52,7 +58,7 @@ In detail, the following resources are currently supported:
 - [Orders](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#orders);
 - [Roles](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#permissions);
 - [Subscriptions](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#subscriptions);
-- [Transactions](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#transactions);
+  <!-- - [Transactions](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#transactions); -->
 - [Vehicles](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#vehicles);
 - [Wallets](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#wallets).
 
