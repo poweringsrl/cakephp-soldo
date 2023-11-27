@@ -3,7 +3,7 @@
 <p>
 	<a href="https://gitlab.com/antognoPW/cakephp-soldo/blob/master/LICENSE"><img src="https://img.shields.io/gitlab/license/antognoPW/cakephp-soldo" alt="License"></a>
 	<a href="https://gitlab.com/antognoPW/cakephp-soldo/commits"><img src="https://img.shields.io/gitlab/last-commit/antognoPW/cakephp-soldo" alt="Last commit"></a>
-	<a href="https://gitlab.com/antognoPW/cakephp-soldo/releases/latest"><img src="https://img.shields.io/gitlab/v/tag/antognoPW/cakephp-soldo?label=last%20release" alt="Last release"></a>
+	<a href="https://gitlab.com/antognoPW/cakephp-soldo/releases"><img src="https://img.shields.io/gitlab/v/tag/antognoPW/cakephp-soldo?label=last%20release" alt="Last release"></a>
 </p>
 
 ## Installation
