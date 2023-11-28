@@ -1,6 +1,13 @@
 {
   "name": "antogno-pw/cakephp-soldo",
   "description": "Soldo plugin for CakePHP",
+  "keywords": [
+    "cakephp",
+    "soldo",
+    "plugin",
+    "php",
+    "api"
+  ],
   "version": "1.0.0",
   "type": "cakephp-plugin",
   "license": "MIT",
