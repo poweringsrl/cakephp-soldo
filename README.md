@@ -98,7 +98,8 @@ class CardsController extends AppController
         $cards = $this->Cards->find()
             ->select([
                 'id',
-                'number' => 'masked_pan'
+                'number' => 'masked_pan',
+                'custom_field' => null
             ])
             // GET parameters as expected from Soldo for this resource
             ->where([

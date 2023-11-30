@@ -63,10 +63,11 @@ class SoldoWebservice extends Webservice
 							$old_key = $fields[$new_key];
 
 							if (!isset($item[$old_key])) {
-								throw new Exception();
+								$acc[$new_key] = $old_key;
+							} else {
+								$acc[!is_int($new_key) ? $new_key : $old_key] = $item[$old_key];
 							}
 
-							$acc[!is_int($new_key) ? $new_key : $old_key] = $item[$old_key];
 							return $acc;
 						}, []);
 					}, $results);
