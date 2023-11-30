@@ -16,12 +16,26 @@ $ composer require antogno-pw/cakephp-soldo
 
 ### Load the plugin
 
-Load the plugin in the `config/bootstrap.php` file:
+Lauch the following command:
+
+```console
+$ bin/cake plugin load Soldo -b
+```
+
+You should see this in `src/Application.php`:
 
 ```php
-use Cake\Core\Plugin;
+class Application extends BaseApplication
+{
+    public function bootstrap()
+    {
+        $this->addPlugin('Soldo', ['bootstrap' => true]);
 
-Plugin::load('Soldo', ['bootstrap' => true]);
+        // ...
+    }
+
+    // ...
+}
 ```
 
 ### Configure the datasource
