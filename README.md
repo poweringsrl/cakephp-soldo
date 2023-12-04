@@ -16,7 +16,7 @@ $ composer require antogno-pw/cakephp-soldo
 
 ### Load the plugin
 
-Lauch the following command:
+Launch the following command:
 
 ```console
 $ bin/cake plugin load Soldo -b
