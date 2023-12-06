@@ -60,9 +60,7 @@ return [
 
 ## Usage
 
-The following code shows an example for the _Card_ resource, but any of the Soldo resources can be used.
-
-In detail, the following resources are currently supported:
+The following Soldo resources are currently supported:
 
 - [Addresses](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#addresses);
 - [Cards](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#cards);
@@ -75,6 +73,8 @@ In detail, the following resources are currently supported:
   <!-- - [Transactions](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#transactions); -->
 - [Vehicles](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#vehicles);
 - [Wallets](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#wallets).
+
+The following code shows an example for the _Card_ resource:
 
 ```php
 namespace App\Controller;
@@ -99,7 +99,7 @@ class CardsController extends AppController
             ->select([
                 'id',
                 'number' => 'masked_pan',
-                'custom_field' => null
+                'custom_field' => 'foo'
             ])
             // GET parameters as expected from Soldo for this resource
             ->where([
@@ -107,14 +107,52 @@ class CardsController extends AppController
                 'customreferenceId' => '1368e647-842b-4d17-9a1a-2ad225e6dc1a'
             ])
             ->order(['name' => 'DESC'])
-            ->limit(10);
+            ->limit(10)
+            ->toArray();
 
         $card = $this->Cards->get('ef12ee12-5cfa-4175-b7e6-665d112aea0e');
-
-        $this->set('cards', $cards);
-        $this->set('card', $card);
     }
 }
+```
+
+`$cards` will look like this:
+
+```php
+array (size=10)
+  0 =>
+    object(Muffin\Webservice\Model\Resource)[2554]
+      public 'id' => string 'df832760-e49b-4699-b34a-46824060bf40' (length=36)
+      public 'number' => string '098765******4321' (length=16)
+      public 'custom_field' => string 'foo' (length=3)
+  1 =>
+    object(Muffin\Webservice\Model\Resource)[3094]
+      public 'id' => string 'a438c8d6-1d94-4ed3-8895-d4565246f647' (length=36)
+      public 'number' => string '123456******7890' (length=16)
+      public 'custom_field' => string 'foo' (length=3)
+  ...
+```
+
+`$card` will look like this:
+
+```php
+object(Muffin\Webservice\Model\Resource)[2555]
+  public 'id' => string 'ef12ee12-5cfa-4175-b7e6-665d112aea0e' (length=36)
+  public 'name' => string 'Bar' (length=12)
+  public 'masked_pan' => string '012345******6789' (length=16)
+  public 'expiration_date' => string '2025-12-31T23:59:59Z' (length=20)
+  public 'creation_time' => string '2022-12-10T19:11:18Z' (length=20)
+  public 'last_update' => string '2023-04-11T08:07:38Z' (length=20)
+  public 'type' => string 'PLASTIC' (length=7)
+  public 'status' => string 'Normal' (length=6)
+  public 'owner_type' => string 'company' (length=7)
+  public 'wallet_id' => string 'a73b9699-9436-4381-951d-a9da2fd6d439' (length=36)
+  public 'currency_code' => string 'EUR' (length=3)
+  public 'emboss_line4' => string 'Baz' (length=13)
+  public 'active' => boolean true
+  public 'method3ds' => string 'USER' (length=4)
+  public 'assignees' =>
+    array (size=0)
+      empty
 ```
 
 > **Note**: Only read queries are currently supported.
