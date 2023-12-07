@@ -2,10 +2,12 @@
 
 namespace Soldo\Model\Endpoint;
 
-use Muffin\Webservice\Model\Endpoint;
+use Soldo\Model\SoldoEndpoint;
 
-class GroupsEndpoint extends Endpoint
+class GroupsEndpoint extends SoldoEndpoint
 {
+	protected bool $_needsFingerprint = false;
+
 	public function initialize(array $config)
 	{
 		parent::initialize($config);

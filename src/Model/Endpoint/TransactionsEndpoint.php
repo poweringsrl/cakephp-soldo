@@ -2,10 +2,28 @@
 
 namespace Soldo\Model\Endpoint;
 
-use Muffin\Webservice\Model\Endpoint;
+use Soldo\Model\SoldoEndpoint;
 
-class TransactionsEndpoint extends Endpoint
+class TransactionsEndpoint extends SoldoEndpoint
 {
+	protected bool $_needsFingerprint = true;
+	protected array $_fingerprintOrder = [
+		'type',
+		'publicId',
+		'customReferenceId',
+		'groupId',
+		'fromDate',
+		'toDate',
+		'dateType',
+		'category',
+		'status',
+		'tagId',
+		'metadataId',
+		'expenseType',
+		'expenseStatus',
+		'text'
+	];
+
 	public function initialize(array $config)
 	{
 		parent::initialize($config);

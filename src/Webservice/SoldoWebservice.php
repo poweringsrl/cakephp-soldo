@@ -106,9 +106,32 @@ class SoldoWebservice extends Webservice
 		$parameters['p'] = $page;
 		$parameters['s'] = $all ? self::MAX_ITEMS_PER_PAGE : $limit;
 
+		$resource_endpoint_class = 'Soldo\Model\Endpoint\\' . $query->endpoint()->getAlias() . 'Endpoint';
+		$resource_endpoint = new $resource_endpoint_class;
+
+		$headers = [];
+		if ($resource_endpoint->_needsFingerprint()) {
+			$token = $this->getDriver()->getConfig('token');
+			$base64_private_key = $this->getDriver()->getConfig('private_key');
+
+			if (empty($token) || empty($base64_private_key)) {
+				throw new Exception();
+			}
+
+			$private_key = base64_decode($base64_private_key);
+
+			$fingerprint =  hash('sha512', $token);
+			$fingerprint_signature = $this->_generateFingerprintSignature($fingerprint, $private_key);
+
+			$headers = [
+				'X-Soldo-Fingerprint' => $fingerprint,
+				'X-Soldo-Fingerprint-Signature' => $fingerprint_signature,
+			];
+		}
+
 		$response = $this->getDriver()
 			->getClient()
-			->get($url, $parameters);
+			->get($url, $parameters, $headers ? ['headers' => $headers] : []);
 
 		$json = $response->getJson();
 
@@ -147,5 +170,24 @@ class SoldoWebservice extends Webservice
 		$offset = ($page - 1) * $limit;
 
 		return array_slice($results, $offset, $limit);
+	}
+
+	private function _generateFingerprintSignature(string $fingerprint, string $private_key)
+	{
+		$private_key_resource = openssl_pkey_get_private($private_key);
+
+		if (!$private_key_resource) {
+			throw new Exception();
+		}
+
+		$fingerprint_signature = '';
+		if (openssl_sign($fingerprint, $fingerprint_signature, $private_key_resource, OPENSSL_ALGO_SHA512)) {
+			$base64_fingerprint_signature = base64_encode($fingerprint_signature);
+			openssl_free_key($private_key_resource);
+
+			return $base64_fingerprint_signature;
+		} else {
+			throw new Exception();
+		}
 	}
 }

@@ -50,9 +50,49 @@ return [
         'soldo' => [
             'className' => \Muffin\Webservice\Connection::class,
             'service' => \Soldo\Webservice\Driver\Soldo::class,
-            'client_id' => '', // Replace with the actual client_id
-            'client_secret' => '', // Replace with the actual client_secret
-            'environment' => 'production', // One of 'production' or 'demo'
+            'client_id' => '', // Replace with the actual value
+            'client_secret' => '', // Replace with the actual value
+            'token' => '', // Replace with the actual value
+            'private_key' => '', // Replace with the RSA private key you shared with Soldo, encoded in Base64
+            'environment' => '', // One of 'production' or 'demo'
+        ],
+    ],
+];
+```
+
+The _token_ and _private_key_ items are optional, but they are both needed if you need to make requests where the [advanced authentication](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#advanced-authentication) is required.
+
+Examples:
+
+```php
+return [
+    // ...
+    'Datasources' => [
+        // ...
+        'soldo' => [
+            'className' => \Muffin\Webservice\Connection::class,
+            'service' => \Soldo\Webservice\Driver\Soldo::class,
+            'client_id' => 'sHR2rMC7yVAxWxkgRPg0LEIHpCXmpj1s',
+            'client_secret' => 'LTVBbG2EnUB1mc30ep3pTgheyCh5WK8O',
+            'environment' => 'production',
+        ],
+    ],
+];
+```
+
+```php
+return [
+    // ...
+    'Datasources' => [
+        // ...
+        'soldo' => [
+            'className' => \Muffin\Webservice\Connection::class,
+            'service' => \Soldo\Webservice\Driver\Soldo::class,
+            'client_id' => 'NF1gtE1dhuwR6Yk5bDcUsdGXtnSgTaGW',
+            'client_secret' => 'g50Xc5TOzMqa2jdBa3dNZ8H7ysKd9mYl',
+            'token' => 'VK6AEW2IAF3SR29SJW4L',
+            'private_key' => 'LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpjYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkCm9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2wKZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zbwpsZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zCm9sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC0Kc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocAotc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBoCnAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXAKaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZQpwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrCmVwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2EKa2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvYwpha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvCmNha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGQKb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbApkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvCmxkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXMKb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLQpzb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwCi1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGgKcC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcApocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlCnBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWsKZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYQprZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaAotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQ==',
+            'environment' => 'production',
         ],
     ],
 ];
@@ -70,7 +110,7 @@ The following Soldo resources are currently supported:
 - [Orders](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#orders);
 - [Roles](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#permissions);
 - [Subscriptions](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#subscriptions);
-  <!-- - [Transactions](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#transactions); -->
+- [Transactions](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#transactions);
 - [Vehicles](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#vehicles);
 - [Wallets](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#wallets).
 
