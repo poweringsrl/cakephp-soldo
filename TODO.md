@@ -1,6 +1,6 @@
 # TODO
 
-This is the Markdown TODO file for [Soldo plugin for CakePHP](https://gitlab.com/antognoPW/cakephp-soldo).
+This is the Markdown TODO file for [Soldo plugin for CakePHP](https://gitlab.com/nedgen/cakephp-soldo).
 
 ## Features
 

@@ -1,9 +1,9 @@
 # Soldo plugin for CakePHP
 
 <p>
-	<a href="https://gitlab.com/antognoPW/cakephp-soldo/blob/master/LICENSE"><img src="https://img.shields.io/gitlab/license/antognoPW/cakephp-soldo" alt="License"></a>
-	<a href="https://gitlab.com/antognoPW/cakephp-soldo/commits"><img src="https://img.shields.io/gitlab/last-commit/antognoPW/cakephp-soldo" alt="Last commit"></a>
-	<a href="https://gitlab.com/antognoPW/cakephp-soldo/-/releases"><img src="https://img.shields.io/gitlab/v/tag/antognoPW/cakephp-soldo?label=last%20release" alt="Last release"></a>
+	<a href="https://gitlab.com/nedgen/cakephp-soldo/blob/master/LICENSE"><img src="https://img.shields.io/gitlab/license/nedgen/cakephp-soldo" alt="License"></a>
+	<a href="https://gitlab.com/nedgen/cakephp-soldo/commits"><img src="https://img.shields.io/gitlab/last-commit/nedgen/cakephp-soldo" alt="Last commit"></a>
+	<a href="https://gitlab.com/nedgen/cakephp-soldo/-/releases"><img src="https://img.shields.io/gitlab/v/tag/nedgen/cakephp-soldo?label=last%20release" alt="Last release"></a>
 </p>
 
 ## Installation
@@ -11,7 +11,7 @@
 You can install this plugin into your CakePHP application using [composer](https://getcomposer.org):
 
 ```
-$ composer require antogno-pw/cakephp-soldo
+$ composer require nedgen/cakephp-soldo
 ```
 
 ### Load the plugin
