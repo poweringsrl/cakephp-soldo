@@ -3,7 +3,7 @@
 <p>
 	<a href="https://github.com/poweringsrl/cakephp-soldo/blob/master/LICENSE"><img src="https://img.shields.io/github/license/poweringsrl/cakephp-soldo" alt="License"></a>
 	<a href="https://github.com/poweringsrl/cakephp-soldo/commits"><img src="https://img.shields.io/github/last-commit/poweringsrl/cakephp-soldo" alt="Last commit"></a>
-	<a href="https://github.com/poweringsrl/cakephp-soldo/-/releases"><img src="https://img.shields.io/github/v/tag/poweringsrl/cakephp-soldo?label=last%20release" alt="Last release"></a>
+	<a href="https://github.com/poweringsrl/cakephp-soldo/releases/latest"><img src="https://img.shields.io/github/v/tag/poweringsrl/cakephp-soldo?label=last%20release" alt="Last release"></a>
 </p>
 
 ## Installation
