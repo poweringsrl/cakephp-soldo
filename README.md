@@ -1,9 +1,9 @@
 # Soldo plugin for CakePHP
 
 <p>
-	<a href="https://gitlab.com/nedgen/cakephp-soldo/blob/master/LICENSE"><img src="https://img.shields.io/gitlab/license/nedgen/cakephp-soldo" alt="License"></a>
-	<a href="https://gitlab.com/nedgen/cakephp-soldo/commits"><img src="https://img.shields.io/gitlab/last-commit/nedgen/cakephp-soldo" alt="Last commit"></a>
-	<a href="https://gitlab.com/nedgen/cakephp-soldo/-/releases"><img src="https://img.shields.io/gitlab/v/tag/nedgen/cakephp-soldo?label=last%20release" alt="Last release"></a>
+	<a href="https://github.com/poweringsrl/cakephp-soldo/blob/master/LICENSE"><img src="https://img.shields.io/github/license/poweringsrl/cakephp-soldo" alt="License"></a>
+	<a href="https://github.com/poweringsrl/cakephp-soldo/commits"><img src="https://img.shields.io/github/last-commit/poweringsrl/cakephp-soldo" alt="Last commit"></a>
+	<a href="https://github.com/poweringsrl/cakephp-soldo/-/releases"><img src="https://img.shields.io/github/v/tag/poweringsrl/cakephp-soldo?label=last%20release" alt="Last release"></a>
 </p>
 
 ## Installation
