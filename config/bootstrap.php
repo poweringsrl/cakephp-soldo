@@ -38,6 +38,10 @@ if (!defined('SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY')) {
 
 Plugin::load('Muffin/Webservice', ['bootstrap' => true]);
 
+if (Cache::getConfig(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY)) {
+    Cache::drop(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY);
+}
+
 Cache::setConfig(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY, [
     'className' => 'File',
     'duration' => '+7200 seconds',
