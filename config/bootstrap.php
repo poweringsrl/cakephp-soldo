@@ -32,7 +32,9 @@ if (!defined('CACHE')) {
     define('CACHE', TMP . 'cache' . DS);
 }
 
-define('SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY', 'soldo_access_token');
+if (!defined('SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY')) {
+    define('SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY', 'soldo_access_token');
+}
 
 Plugin::load('Muffin/Webservice', ['bootstrap' => true]);
 
