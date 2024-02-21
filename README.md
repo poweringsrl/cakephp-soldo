@@ -54,7 +54,7 @@ return [
             'client_secret' => '', // Replace with the actual value
             'token' => '', // Replace with the actual value
             'private_key' => '', // Replace with the RSA private key you shared with Soldo, encoded in Base64
-            'environment' => '', // One of 'production' or 'demo'
+            'environment' => '', // One of "production" or "demo"
         ],
     ],
 ];

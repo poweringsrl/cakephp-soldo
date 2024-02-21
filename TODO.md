@@ -12,4 +12,4 @@ This is the Markdown TODO file for [Soldo plugin for CakePHP](https://github.com
 
 - [ ] Add tests
 - [ ] Add PHPDoc
-- [ ] Add specific exceptions for each error
+- [x] Add specific exceptions for each error

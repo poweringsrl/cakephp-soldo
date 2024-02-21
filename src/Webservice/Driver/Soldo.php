@@ -2,11 +2,10 @@
 
 namespace Soldo\Webservice\Driver;
 
-use Cake\Cache\Cache;
-use Cake\Http\Client;
-use Exception;
 use Muffin\Webservice\AbstractDriver;
-use Soldo\Http\Client\Adapter\SoldoCurl;
+use Soldo\Error\FailedStandardAuthenticationException;
+use Soldo\Error\InvalidEnvironmentException;
+use Soldo\Error\NoStandardCredentialsException;
 
 class Soldo extends AbstractDriver
 {
@@ -15,6 +14,19 @@ class Soldo extends AbstractDriver
 	protected const API_AUTHORIZE_PATH = '/oauth/authorize';
 	protected const ACCESS_TOKEN_CACHE_KEY = 'soldo_access_token';
 
+	/**
+	 * @var \Cake\Http\Client
+	 */
+	protected $_client;
+
+	/**
+	 * @return \Cake\Http\Client
+	 */
+	public function getClient()
+	{
+		return parent::getClient();
+	}
+
 	public function initialize()
 	{
 		$host = $this->getHost();
@@ -22,7 +34,7 @@ class Soldo extends AbstractDriver
 		$token = $this->getAccessToken();
 
 		$this->setClient(
-			new Client([
+			new \Cake\Http\Client([
 				'host' => $host,
 				'scheme' => 'https',
 				'headers' => ['Authorization' => 'Bearer ' . $token],
@@ -35,7 +47,7 @@ class Soldo extends AbstractDriver
 		$environment = $this->getConfig('environment');
 
 		if (!in_array($environment, ['production', 'demo'])) {
-			throw new Exception();
+			throw new InvalidEnvironmentException($environment);
 		}
 
 		return $environment === 'production' ? static::API_PRODUCTION_HOST : static::API_DEMO_HOST;
@@ -48,17 +60,17 @@ class Soldo extends AbstractDriver
 
 		$access_token_cache_key = self::ACCESS_TOKEN_CACHE_KEY . '_' . sha1($client_id . $client_secret);
 
-		if (Cache::read($access_token_cache_key) !== false) {
-			return Cache::read($access_token_cache_key);
+		if (\Cake\Cache\Cache::read($access_token_cache_key) !== false) {
+			return \Cake\Cache\Cache::read($access_token_cache_key);
 		}
 
 		if (empty($client_id) || empty($client_secret)) {
-			throw new Exception();
+			throw new NoStandardCredentialsException();
 		}
 
 		$host = $this->getHost();
 
-		$authorizer = new Client([
+		$authorizer = new \Cake\Http\Client([
 			'host' => $host,
 			'scheme' => 'https',
 		]);
@@ -69,7 +81,7 @@ class Soldo extends AbstractDriver
 		]);
 
 		if (!$response->isOk()) {
-			throw new Exception();
+			throw new FailedStandardAuthenticationException();
 		}
 
 		$data = $response->getJson();
@@ -80,16 +92,16 @@ class Soldo extends AbstractDriver
 			empty($data['expires_in']) ||
 			$data['token_type'] !== 'bearer'
 		) {
-			throw new Exception();
+			throw new FailedStandardAuthenticationException('Could not retrieve the access token');
 		}
 
 		$token = $data['access_token'];
 		$expiration = intval($data['expires_in']);
 
-		$engine = Cache::engine(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY);
+		$engine = \Cake\Cache\Cache::engine(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY);
 		$engine->setConfig(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY, '+' . $expiration . ' seconds');
 
-		Cache::write($access_token_cache_key, $token, SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY);
+		\Cake\Cache\Cache::write($access_token_cache_key, $token, SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY);
 
 		return $token;
 	}

@@ -2,16 +2,32 @@
 
 namespace Soldo\Webservice;
 
-use Cake\Http\Client\Message;
 use Exception;
 use Muffin\Webservice\Query;
 use Muffin\Webservice\ResultSet;
 use Muffin\Webservice\Webservice\Webservice;
+use Soldo\Error\FailedRequestException;
+use Soldo\Error\InvalidFingerprintException;
+use Soldo\Error\NoAdvancedCredentialsException;
+use Soldo\Error\ReadQueryException;
 
 class SoldoWebservice extends Webservice
 {
 	protected const API_ENTRY_POINT = '/business/v2';
 	protected const MAX_ITEMS_PER_PAGE = 50;
+
+	/**
+	 * @var \Soldo\Webservice\Driver\Soldo|null
+	 */
+	protected $_driver;
+
+	/**
+	 * @return \Soldo\Webservice\Driver\Soldo|null
+	 */
+	public function getDriver()
+	{
+		return parent::getDriver();
+	}
 
 	protected function _executeReadQuery(Query $query, array $options = [])
 	{
@@ -30,7 +46,7 @@ class SoldoWebservice extends Webservice
 
 			// Currently Soldo supports only one order clause at the same time
 			if (count($order) > 1) {
-				throw new Exception();
+				throw new ReadQueryException('There must be a maximum of one order clause at a time');
 			}
 
 			$field = array_keys($order)[0];
@@ -115,7 +131,7 @@ class SoldoWebservice extends Webservice
 			$base64_private_key = $this->getDriver()->getConfig('private_key');
 
 			if (empty($token) || empty($base64_private_key)) {
-				throw new Exception();
+				throw new NoAdvancedCredentialsException();
 			}
 
 			$private_key = base64_decode($base64_private_key);
@@ -135,14 +151,14 @@ class SoldoWebservice extends Webservice
 
 		$json = $response->getJson();
 
-		if ($response->getStatusCode() !== Message::STATUS_OK) {
+		if ($response->getStatusCode() !== \Cake\Http\Client\Message::STATUS_OK) {
 			if (isset($json['error_code']) || isset($json['error'])) {
-				throw new Exception($json['message'] ?? ($json['error_description'] ?? ''));
+				throw new FailedRequestException($json['message'] ?? ($json['error_description'] ?? ''));
 			}
 		}
 
 		if (!$response->isOk()) {
-			throw new Exception();
+			throw new FailedRequestException();
 		}
 
 		if (isset($json['results'])) {
@@ -177,7 +193,7 @@ class SoldoWebservice extends Webservice
 		$private_key_resource = openssl_pkey_get_private($private_key);
 
 		if (!$private_key_resource) {
-			throw new Exception();
+			throw new InvalidFingerprintException('Could not retrieve the private key needed for the advanced authentication');
 		}
 
 		$fingerprint_signature = '';
@@ -187,7 +203,7 @@ class SoldoWebservice extends Webservice
 
 			return $base64_fingerprint_signature;
 		} else {
-			throw new Exception();
+			throw new InvalidFingerprintException('Could not generate the signature for the private key needed for the advanced authentication');
 		}
 	}
 }
