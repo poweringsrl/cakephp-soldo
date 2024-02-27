@@ -44,21 +44,18 @@ class Soldo extends AbstractDriver
 
 	protected function getHost()
 	{
-		$environment = $this->getConfig('environment');
-
-		if (!in_array($environment, ['production', 'demo'])) {
-			throw new InvalidEnvironmentException($environment);
-		}
-
-		return $environment === 'production' ? static::API_PRODUCTION_HOST : static::API_DEMO_HOST;
+		return $this->getEnvironment() === 'production'
+			? static::API_PRODUCTION_HOST
+			: static::API_DEMO_HOST;
 	}
 
 	protected function getAccessToken()
 	{
 		$client_id = $this->getConfig('client_id');
 		$client_secret = $this->getConfig('client_secret');
+		$environment = $this->getEnvironment();
 
-		$access_token_cache_key = self::ACCESS_TOKEN_CACHE_KEY . '_' . sha1($client_id . $client_secret);
+		$access_token_cache_key = self::ACCESS_TOKEN_CACHE_KEY . '_' . sha1($client_id . $client_secret . $environment);
 
 		if (\Cake\Cache\Cache::read($access_token_cache_key) !== false) {
 			return \Cake\Cache\Cache::read($access_token_cache_key);
@@ -104,5 +101,16 @@ class Soldo extends AbstractDriver
 		\Cake\Cache\Cache::write($access_token_cache_key, $token, SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY);
 
 		return $token;
+	}
+
+	private function getEnvironment()
+	{
+		$environment = $this->getConfig('environment');
+
+		if (empty($environment) || !in_array($environment, ['production', 'demo'])) {
+			throw new InvalidEnvironmentException($environment);
+		}
+
+		return $environment;
 	}
 }
