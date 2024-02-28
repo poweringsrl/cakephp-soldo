@@ -2,7 +2,6 @@
 
 namespace Soldo\Webservice;
 
-use Exception;
 use Muffin\Webservice\Query;
 use Muffin\Webservice\ResultSet;
 use Muffin\Webservice\Webservice\Webservice;
@@ -26,7 +25,14 @@ class SoldoWebservice extends Webservice
 	 */
 	public function getDriver()
 	{
-		return parent::getDriver();
+		/** @var \Soldo\Webservice\Driver\Soldo|null $driver */
+		$driver = parent::getDriver();
+
+		if ($driver) {
+			$driver->authenticate();
+		}
+
+		return $driver;
 	}
 
 	protected function _executeReadQuery(Query $query, array $options = [])

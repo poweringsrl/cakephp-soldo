@@ -29,17 +29,14 @@ class Soldo extends AbstractDriver
 
 	public function initialize()
 	{
-		$host = $this->getHost();
+		$this->setClient(new \Cake\Http\Client($this->getClientConfig($this->isAutologinEnabled())));
+	}
 
-		$token = $this->getAccessToken();
+	public function authenticate()
+	{
+		$this->setClient(new \Cake\Http\Client($this->getClientConfig(true)));
 
-		$this->setClient(
-			new \Cake\Http\Client([
-				'host' => $host,
-				'scheme' => 'https',
-				'headers' => ['Authorization' => 'Bearer ' . $token],
-			])
-		);
+		return $this;
 	}
 
 	protected function getHost()
@@ -112,5 +109,29 @@ class Soldo extends AbstractDriver
 		}
 
 		return $environment;
+	}
+
+	protected function getClientConfig(bool $authenticate)
+	{
+		$host = $this->getHost();
+
+		$config = [
+			'host' => $host,
+			'scheme' => 'https',
+		];
+
+		if ($authenticate === true) {
+			$token = $this->getAccessToken();
+			$config['headers'] = ['Authorization' => 'Bearer ' . $token];
+		}
+
+		return $config;
+	}
+
+	private function isAutologinEnabled()
+	{
+		$autologin = $this->getConfig('autologin');
+
+		return $autologin === true || $autologin === null;
 	}
 }

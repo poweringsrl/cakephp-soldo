@@ -55,6 +55,7 @@ return [
             'token' => '', // Replace with the actual value
             'private_key' => '', // Replace with the RSA private key you shared with Soldo, encoded in Base64
             'environment' => '', // One of "production" or "demo"
+            'autologin' => true, // Whether to try to authenticate as soon as the plugin is initialized, or wait until needed
         ],
     ],
 ];
@@ -74,7 +75,8 @@ return [
             'service' => \Soldo\Webservice\Driver\Soldo::class,
             'client_id' => 'sHR2rMC7yVAxWxkgRPg0LEIHpCXmpj1s',
             'client_secret' => 'LTVBbG2EnUB1mc30ep3pTgheyCh5WK8O',
-            'environment' => 'production',
+            'environment' => 'demo',
+            'autologin' => true,
         ],
     ],
 ];
@@ -93,6 +95,7 @@ return [
             'token' => 'VK6AEW2IAF3SR29SJW4L',
             'private_key' => 'LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpjYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkCm9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2wKZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zbwpsZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zCm9sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC0Kc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocAotc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBoCnAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXAKaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZQpwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrCmVwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2EKa2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvYwpha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvCmNha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGQKb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbApkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvCmxkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXMKb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLQpzb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwCi1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGgKcC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcApocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlCnBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWsKZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYQprZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaAotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQ==',
             'environment' => 'production',
+            'autologin' => false,
         ],
     ],
 ];
