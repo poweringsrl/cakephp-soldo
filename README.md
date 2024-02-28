@@ -142,18 +142,23 @@ class CardsController extends AppController
             ->select([
                 'id',
                 'number' => 'masked_pan',
-                'custom_field' => 'foo'
+                'custom_field' => 'foo',
             ])
-            // GET parameters as expected from Soldo for this resource
             ->where([
+                // GET parameters as expected from Soldo for this resource
                 'type' => 'wallet',
-                'customreferenceId' => '1368e647-842b-4d17-9a1a-2ad225e6dc1a'
+                'customreferenceId' => '1368e647-842b-4d17-9a1a-2ad225e6dc1a',
             ])
             ->order(['name' => 'DESC'])
             ->limit(10)
             ->toArray();
 
-        $card = $this->Cards->get('ef12ee12-5cfa-4175-b7e6-665d112aea0e');
+        $card = $this->Cards->get('ef12ee12-5cfa-4175-b7e6-665d112aea0e', [
+            'conditions' => [
+                // GET parameters as expected from Soldo for this resource
+                'showSensitiveData' => 'true',
+            ]
+        ]);
     }
 }
 ```
@@ -193,6 +198,11 @@ object(Muffin\Webservice\Model\Resource)[2555]
   public 'emboss_line4' => string 'Baz' (length=13)
   public 'active' => boolean true
   public 'method3ds' => string 'USER' (length=4)
+  public 'sensitive_data' =>
+    array (size=3)
+      'encrypted_full_pan' => string 'MDEyMzQ1MDAwMDAwNjc4OWNha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHA=' (length=344)
+      'encrypted_cvv' => string 'MTIzY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHA=' (length=344)
+      'encrypted_pin' => string 'MTIzNGNha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGhwLXNvbGRvY2FrZXBocC1zb2xkb2Nha2VwaHAtc29sZG9jYWtlcGg=' (length=344)
   public 'assignees' =>
     array (size=0)
       empty
