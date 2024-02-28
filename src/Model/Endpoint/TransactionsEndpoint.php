@@ -7,6 +7,7 @@ use Soldo\Model\SoldoEndpoint;
 class TransactionsEndpoint extends SoldoEndpoint
 {
 	protected bool $_needsFingerprint = true;
+
 	protected array $_fingerprintOrder = [
 		'type',
 		'publicId',

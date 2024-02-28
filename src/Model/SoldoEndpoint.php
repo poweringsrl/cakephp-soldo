@@ -7,6 +7,7 @@ use Muffin\Webservice\Model\Endpoint;
 class SoldoEndpoint extends Endpoint
 {
     protected bool $_needsFingerprint = false;
+
     protected array $_fingerprintOrder = [];
 
     public function _needsFingerprint()

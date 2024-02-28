@@ -129,6 +129,8 @@ class SoldoWebservice extends Webservice
 		$parameters['s'] = $all ? self::MAX_ITEMS_PER_PAGE : $limit;
 
 		$resource_endpoint_class = 'Soldo\Model\Endpoint\\' . $query->endpoint()->getAlias() . 'Endpoint';
+
+		/** @var \Soldo\Model\SoldoEndpoint $resource_endpoint */
 		$resource_endpoint = new $resource_endpoint_class;
 
 		$headers = [];
@@ -142,7 +144,7 @@ class SoldoWebservice extends Webservice
 
 			$private_key = base64_decode($base64_private_key);
 
-			$fingerprint =  hash('sha512', $token);
+			$fingerprint = $this->_generateFingerprint($resource_endpoint->_fingerprintOrder(), $parameters, $token);
 			$fingerprint_signature = $this->_generateFingerprintSignature($fingerprint, $private_key);
 
 			$headers = [
@@ -192,6 +194,21 @@ class SoldoWebservice extends Webservice
 		$offset = ($page - 1) * $limit;
 
 		return array_slice($results, $offset, $limit);
+	}
+
+	private function _generateFingerprint(array $fingerprint_order, array $parameters, string $token)
+	{
+		$data = $token;
+
+		if (!empty($fingerprint_order) && !empty($parameters)) {
+			foreach (array_reverse(array_values($fingerprint_order)) as $parameter) {
+				if (isset($parameters[$parameter]) && !empty($parameters[$parameter])) {
+					$data = $parameters[$parameter] . $data;
+				}
+			}
+		}
+
+		return hash('sha512', $data);
 	}
 
 	private function _generateFingerprintSignature(string $fingerprint, string $private_key)
