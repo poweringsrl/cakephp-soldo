@@ -2,6 +2,7 @@
 
 namespace Soldo\Webservice;
 
+use Muffin\Webservice\Model\Resource;
 use Muffin\Webservice\Query;
 use Muffin\Webservice\ResultSet;
 use Muffin\Webservice\Webservice\Webservice;
@@ -12,7 +13,20 @@ use Soldo\Error\ReadQueryException;
 
 class SoldoWebservice extends Webservice
 {
+	/**
+	 * The API entry point
+	 *
+	 * @var string
+	 */
 	protected const API_ENTRY_POINT = '/business/v2';
+
+	/**
+	 * The maximum number of items per page supported by Soldo
+	 * 
+	 * @var int
+	 * 
+	 * @link https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#pagination
+	 */
 	protected const MAX_ITEMS_PER_PAGE = 50;
 
 	/**
@@ -104,11 +118,35 @@ class SoldoWebservice extends Webservice
 		return new ResultSet($resources, count($resources));
 	}
 
+	/**
+	 * Returns the base URL to use
+	 * 
+	 * @return string
+	 */
 	protected function _baseUrl()
 	{
 		return '/' . trim(static::API_ENTRY_POINT, '/') . '/' . $this->getEndpoint();
 	}
 
+	/**
+	 * Executes a GET request based on the given parameters
+	 * 
+	 * @param Query $query The query to execute.
+	 * @param array $parameters The GET parameters to send.
+	 * @param bool $all Whether to retrieve all the items or not. The way this
+	 * is achieved is by continuing to make requests until the pages are
+	 * finished. In this case the `$page` and `$limit` parameters are not
+	 * needed.
+	 * @param int $page The page to retrieve, starting from 0. Not needed in
+	 * case the `$all` option is `true`.
+	 * @param int $limit The number of items to retrieve. Not needed in case the
+	 * `$all` option is `true`.
+	 * @param array $prev_json The previous result to merge with the current
+	 * result. This is used starting from the second request when the `$all`
+	 * option is `true`.
+	 * 
+	 * @return array The response body.
+	 */
 	protected function _sendRequest(
 		Query $query,
 		array $parameters,
@@ -125,7 +163,7 @@ class SoldoWebservice extends Webservice
 			unset($parameters[$primary_key]);
 		}
 
-		$parameters['p'] = $page;
+		$parameters['p'] = $all ? 0 : $page;
 		$parameters['s'] = $all ? self::MAX_ITEMS_PER_PAGE : $limit;
 
 		$resource_endpoint_class = 'Soldo\Model\Endpoint\\' . $query->endpoint()->getAlias() . 'Endpoint';
@@ -159,6 +197,10 @@ class SoldoWebservice extends Webservice
 
 		$json = $response->getJson();
 
+		if ($json === null) {
+			throw new FailedRequestException('The response was empty');
+		}
+
 		if ($response->getStatusCode() !== \Cake\Http\Client\Message::STATUS_OK) {
 			if (isset($json['error_code']) || isset($json['error'])) {
 				throw new FailedRequestException($json['message'] ?? ($json['error_description'] ?? ''));
@@ -180,6 +222,14 @@ class SoldoWebservice extends Webservice
 		return $json;
 	}
 
+	/**
+	 * Paginates the given results
+	 * 
+	 * @param Query $query The executed query.
+	 * @param Resource[] $results The non-paginated results.
+	 * 
+	 * @return Resource[]
+	 */
 	protected function _paginateResults(Query $query, array $results)
 	{
 		$limit = $query->clause('limit');
@@ -196,6 +246,17 @@ class SoldoWebservice extends Webservice
 		return array_slice($results, $offset, $limit);
 	}
 
+	/**
+	 * Generates a fingerprint based on the given parameters
+	 * 
+	 * @param string[] $fingerprint_order The fingerprint order to use.
+	 * @param array $parameters The GET parameters.
+	 * @param string $token The token.
+	 * 
+	 * @return string
+	 * 
+	 * @link https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#advanced-authentication
+	 */
 	private function _generateFingerprint(array $fingerprint_order, array $parameters, string $token)
 	{
 		$data = $token;
@@ -211,6 +272,17 @@ class SoldoWebservice extends Webservice
 		return hash('sha512', $data);
 	}
 
+	/**
+	 * Signs the given fingerprint with the given private key
+	 * 
+	 * @param string $fingerprint The fingerprint to sign.
+	 * @param string $private_key The RSA private key shared with Soldo, encoded
+	 * in Base64.
+	 * 
+	 * @return string
+	 * 
+	 * @link https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#advanced-authentication
+	 */
 	private function _generateFingerprintSignature(string $fingerprint, string $private_key)
 	{
 		$private_key_resource = openssl_pkey_get_private($private_key);

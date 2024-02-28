@@ -10,5 +10,5 @@ This is the Markdown TODO file for [Soldo plugin for CakePHP](https://github.com
 ## Codebase
 
 - [ ] Add tests
-- [ ] Add PHPDoc
+- [x] Add PHPDoc
 - [x] Add specific exceptions for each error

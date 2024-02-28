@@ -9,10 +9,37 @@ use Soldo\Error\NoStandardCredentialsException;
 
 class Soldo extends AbstractDriver
 {
+	/**
+	 * The API host when using Soldo in production
+	 *
+	 * @var string
+	 */
 	protected const API_PRODUCTION_HOST = 'api.soldo.com';
+
+	/**
+	 * The API host when using Soldo in demo
+	 *
+	 * @var string
+	 * 
+	 * @link https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#api-setup
+	 */
 	protected const API_DEMO_HOST = 'api-demo.soldocloud.net';
+
+	/**
+	 * The endpoint to call for authentication
+	 * 
+	 * @var string
+	 * 
+	 * @link https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#standard-authentication
+	 */
 	protected const API_AUTHORIZE_PATH = '/oauth/authorize';
-	protected const ACCESS_TOKEN_CACHE_KEY = 'soldo_access_token';
+
+	/**
+	 * The prefix of the cache key used to store the access token
+	 *
+	 * @var string
+	 */
+	protected const ACCESS_TOKEN_CACHE_KEY_PREFIX = 'soldo_access_token_';
 
 	/**
 	 * @var \Cake\Http\Client
@@ -32,6 +59,12 @@ class Soldo extends AbstractDriver
 		$this->setClient(new \Cake\Http\Client($this->getClientConfig($this->isAutologinEnabled())));
 	}
 
+	/**
+	 * Replaces the client instance this driver will use to make requests, so
+	 * that it also includes the access token in the header
+	 * 
+	 * @return $this
+	 */
 	public function authenticate()
 	{
 		$this->setClient(new \Cake\Http\Client($this->getClientConfig(true)));
@@ -39,6 +72,11 @@ class Soldo extends AbstractDriver
 		return $this;
 	}
 
+	/**
+	 * Returns the host to use
+	 * 
+	 * @return string
+	 */
 	protected function getHost()
 	{
 		return $this->getEnvironment() === 'production'
@@ -46,13 +84,18 @@ class Soldo extends AbstractDriver
 			: static::API_DEMO_HOST;
 	}
 
+	/**
+	 * Returns the access token
+	 * 
+	 * @return string
+	 */
 	protected function getAccessToken()
 	{
 		$client_id = $this->getConfig('client_id');
 		$client_secret = $this->getConfig('client_secret');
 		$environment = $this->getEnvironment();
 
-		$access_token_cache_key = self::ACCESS_TOKEN_CACHE_KEY . '_' . sha1($client_id . $client_secret . $environment);
+		$access_token_cache_key = self::ACCESS_TOKEN_CACHE_KEY_PREFIX . sha1($client_id . $client_secret . $environment);
 
 		if (\Cake\Cache\Cache::read($access_token_cache_key) !== false) {
 			return \Cake\Cache\Cache::read($access_token_cache_key);
@@ -100,6 +143,11 @@ class Soldo extends AbstractDriver
 		return $token;
 	}
 
+	/**
+	 * Returns the current environment
+	 * 
+	 * @return string
+	 */
 	private function getEnvironment()
 	{
 		$environment = $this->getConfig('environment');
@@ -111,6 +159,15 @@ class Soldo extends AbstractDriver
 		return $environment;
 	}
 
+	/**
+	 * Returns the config options for the client instance this driver will use
+	 * to make requests
+	 * 
+	 * @param bool $authenticate Whether to add the access token in the header
+	 * or not.
+	 * 
+	 * @return string
+	 */
 	protected function getClientConfig(bool $authenticate)
 	{
 		$host = $this->getHost();
@@ -128,6 +185,11 @@ class Soldo extends AbstractDriver
 		return $config;
 	}
 
+	/**
+	 * Whether the auto-login option is enabled or not
+	 * 
+	 * @return bool
+	 */
 	private function isAutologinEnabled()
 	{
 		$autologin = $this->getConfig('autologin');
