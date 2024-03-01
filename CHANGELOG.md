@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Constant definition of the cache config key.
 - The cache key where the access token is stored is also based on the current environment.
 
-## [Version 1.1.0][v1.1.0] - 2024-01-17
+## [Version 1.1.0][v1.1.0] - 2023-12-07
 
 ### Added
 
@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The cache key where the access token is stored is also based on credentials.
 
-## [Version 1.0.0][v1.0.0] - 2024-01-17
+## [Version 1.0.0][v1.0.0] - 2023-11-27
 
 ### Initial release
 
