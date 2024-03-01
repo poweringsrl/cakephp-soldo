@@ -5,7 +5,7 @@ This is the Markdown TODO file for [Soldo plugin for CakePHP](https://github.com
 ## Features
 
 - [x] Add [Transactions](https://developer.soldo.com/reference/transaction-search) support
-- [x] Support for using GET parameters when requesting resources where the [advanced authentication](https://developer.soldo.com/docs/advanced-authentication) is required, by using the "fingerprint order"
+- [x] Support for using GET parameters when requesting resources where the [advanced authentication](https://developer.soldo.com/docs/advanced-authentication) is required, by using the fingerprint order
 - [x] Add support for [internal transfers](https://developer.soldo.com/reference/wallet-internal-transfer)
 
 ## Codebase
