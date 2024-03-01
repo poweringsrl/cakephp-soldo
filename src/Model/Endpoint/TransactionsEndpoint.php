@@ -9,6 +9,7 @@ class TransactionsEndpoint extends SoldoEndpoint
 	protected bool $_needsFingerprint = true;
 
 	protected array $_fingerprintOrder = [
+		'id',
 		'type',
 		'publicId',
 		'customReferenceId',

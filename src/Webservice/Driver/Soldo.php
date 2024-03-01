@@ -20,8 +20,6 @@ class Soldo extends AbstractDriver
 	 * The API host when using Soldo in demo
 	 *
 	 * @var string
-	 * 
-	 * @link https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#api-setup
 	 */
 	protected const API_DEMO_HOST = 'api-demo.soldocloud.net';
 
@@ -30,7 +28,7 @@ class Soldo extends AbstractDriver
 	 * 
 	 * @var string
 	 * 
-	 * @link https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#standard-authentication
+	 * @link https://developer.soldo.com/docs/standard-authentication
 	 */
 	protected const API_AUTHORIZE_PATH = '/oauth/authorize';
 

@@ -2,14 +2,15 @@
 
 namespace Soldo\Webservice;
 
+use Cake\Http\Client\Response;
 use Muffin\Webservice\Model\Resource;
 use Muffin\Webservice\Query;
 use Muffin\Webservice\ResultSet;
 use Muffin\Webservice\Webservice\Webservice;
 use Soldo\Error\FailedRequestException;
-use Soldo\Error\InvalidFingerprintException;
 use Soldo\Error\NoAdvancedCredentialsException;
 use Soldo\Error\ReadQueryException;
+use Soldo\Utility\Fingerprint;
 
 class SoldoWebservice extends Webservice
 {
@@ -25,9 +26,27 @@ class SoldoWebservice extends Webservice
 	 * 
 	 * @var int
 	 * 
-	 * @link https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#pagination
+	 * @link https://developer.soldo.com/docs/pagination-and-sorting
 	 */
 	protected const MAX_ITEMS_PER_PAGE = 50;
+
+	/**
+	 * The name of the header parameter for the fingerprint
+	 * 
+	 * @var string
+	 * 
+	 * @link https://developer.soldo.com/docs/advanced-authentication
+	 */
+	protected const FINGERPRINT_HEADER_PARAMETER = 'X-Soldo-Fingerprint';
+
+	/**
+	 * The name of the header parameter for the fingerprint signature
+	 * 
+	 * @var string
+	 * 
+	 * @link https://developer.soldo.com/docs/advanced-authentication
+	 */
+	protected const FINGERPRINT_SIGNATURE_HEADER_PARAMETER = 'X-Soldo-Fingerprint-Signature';
 
 	/**
 	 * @var \Soldo\Webservice\Driver\Soldo|null
@@ -47,6 +66,18 @@ class SoldoWebservice extends Webservice
 		}
 
 		return $driver;
+	}
+
+	public function initialize()
+	{
+		parent::initialize();
+
+		$this->addNestedResource('/:id', ['id']);
+	}
+
+	protected function _executeCreateQuery(Query $query, array $options = [])
+	{
+		return parent::_executeCreateQuery($query, $options);
 	}
 
 	protected function _executeReadQuery(Query $query, array $options = [])
@@ -83,9 +114,20 @@ class SoldoWebservice extends Webservice
 
 		$all = !$limit || $limit > self::MAX_ITEMS_PER_PAGE;
 
+		$url = $this->_baseUrl();
+
+		$primary_key = $query->endpoint()->getPrimaryKey();
+		if ($primary_key && isset($parameters[$primary_key])) {
+			$path = $this->nestedResource(['id' => $parameters[$primary_key]]);
+
+			if (is_string($path)) {
+				$url .= $path;
+			}
+		}
+
 		$json = $all
-			? $this->_sendRequest($query, $parameters, $all)
-			: $this->_sendRequest($query, $parameters, $all, $page, $limit);
+			? $this->_getRequest($query, $url, $parameters, $all)
+			: $this->_getRequest($query, $url, $parameters, $all, $page, $limit);
 
 		$results = isset($json['results']) ? $json['results'] : [$json];
 
@@ -118,6 +160,16 @@ class SoldoWebservice extends Webservice
 		return new ResultSet($resources, count($resources));
 	}
 
+	protected function _executeUpdateQuery(Query $query, array $options = [])
+	{
+		return parent::_executeUpdateQuery($query, $options);
+	}
+
+	protected function _executeDeleteQuery(Query $query, array $options = [])
+	{
+		return parent::_executeDeleteQuery($query, $options);
+	}
+
 	/**
 	 * Returns the base URL to use
 	 * 
@@ -132,6 +184,7 @@ class SoldoWebservice extends Webservice
 	 * Executes a GET request based on the given parameters
 	 * 
 	 * @param Query $query The query to execute.
+	 * @param string $url The URL to request.
 	 * @param array $parameters The GET parameters to send.
 	 * @param bool $all Whether to retrieve all the items or not. The way this
 	 * is achieved is by continuing to make requests until the pages are
@@ -147,32 +200,78 @@ class SoldoWebservice extends Webservice
 	 * 
 	 * @return array The response body.
 	 */
-	protected function _sendRequest(
+	protected function _getRequest(
 		Query $query,
+		string $url,
 		array $parameters,
 		bool $all = false,
 		int $page = 0,
 		int $limit = self::MAX_ITEMS_PER_PAGE,
 		array $prev_json = []
 	) {
-		$url = $this->_baseUrl();
-
-		$primary_key = $query->endpoint()->getPrimaryKey();
-		if ($primary_key && isset($parameters[$primary_key])) {
-			$url .= '/' . $parameters[$primary_key];
-			unset($parameters[$primary_key]);
-		}
-
 		$parameters['p'] = $all ? 0 : $page;
 		$parameters['s'] = $all ? self::MAX_ITEMS_PER_PAGE : $limit;
 
-		$resource_endpoint_class = 'Soldo\Model\Endpoint\\' . $query->endpoint()->getAlias() . 'Endpoint';
+		$headers = $this->_getHeaders($query, $parameters);
 
-		/** @var \Soldo\Model\SoldoEndpoint $resource_endpoint */
-		$resource_endpoint = new $resource_endpoint_class;
+		$response = $this->getDriver()
+			->getClient()
+			->get($url, $parameters, $headers ? ['headers' => $headers] : []);
+
+		$json = $this->_parseResponse($response);
+
+		if (isset($json['results'])) {
+			if ($all && count($json['results']) === self::MAX_ITEMS_PER_PAGE) {
+				$json = $this->_getRequest($query, $url, $parameters, $all, ++$page, $limit, $json);
+			}
+
+			$json['results'] = array_merge($prev_json['results'] ?? [], $json['results']);
+		}
+
+		return $json;
+	}
+
+	/**
+	 * Executes a PUT request based on the given parameters
+	 * 
+	 * @param Query $query The query to execute.
+	 * @param string $url The URL to request.
+	 * @param array $parameters The data to send.
+	 * 
+	 * @return array The response body.
+	 */
+	protected function _putRequest(Query $query, string $url, array $data)
+	{
+		$headers = $this->_getHeaders($query, $data);
+
+		$response = $this->getDriver()
+			->getClient()
+			->put($url, $data, $headers ? ['headers' => $headers] : []);
+
+		$json = $this->_parseResponse($response);
+
+		return $json;
+	}
+
+	/**
+	 * Returns the needed HTTP headers required for the given query
+	 * 
+	 * @param Query $query The query.
+	 * @param array $fingerprint_parameters The parameters from which to take
+	 * the values if the fingerprint order requires them.
+	 * 
+	 * @return string[]
+	 */
+	private function _getHeaders(Query $query, array $fingerprint_parameters)
+	{
+		$endpoint_class = 'Soldo\Model\Endpoint\\' . $query->endpoint()->getAlias() . 'Endpoint';
+
+		/** @var \Soldo\Model\SoldoEndpoint $endpoint */
+		$endpoint = new $endpoint_class;
+		// $endpoint = $query->endpoint();
 
 		$headers = [];
-		if ($resource_endpoint->_needsFingerprint()) {
+		if ($endpoint->needsFingerprint()) {
 			$token = $this->getDriver()->getConfig('token');
 			$base64_private_key = $this->getDriver()->getConfig('private_key');
 
@@ -182,19 +281,27 @@ class SoldoWebservice extends Webservice
 
 			$private_key = base64_decode($base64_private_key);
 
-			$fingerprint = $this->_generateFingerprint($resource_endpoint->_fingerprintOrder(), $parameters, $token);
-			$fingerprint_signature = $this->_generateFingerprintSignature($fingerprint, $private_key);
+			$fingerprint = Fingerprint::generate($endpoint->getFingerprintOrder(), $fingerprint_parameters, $token);
+			$fingerprint_signature = Fingerprint::sign($fingerprint, $private_key);
 
 			$headers = [
-				'X-Soldo-Fingerprint' => $fingerprint,
-				'X-Soldo-Fingerprint-Signature' => $fingerprint_signature,
+				self::FINGERPRINT_HEADER_PARAMETER => $fingerprint,
+				self::FINGERPRINT_SIGNATURE_HEADER_PARAMETER => $fingerprint_signature,
 			];
 		}
 
-		$response = $this->getDriver()
-			->getClient()
-			->get($url, $parameters, $headers ? ['headers' => $headers] : []);
+		return $headers;
+	}
 
+	/**
+	 * Parses the HTTP response body into a valid array
+	 * 
+	 * @param Response $response The HTTP response.
+	 * 
+	 * @return array
+	 */
+	private function _parseResponse(Response $response)
+	{
 		$json = $response->getJson();
 
 		if ($json === null) {
@@ -211,14 +318,6 @@ class SoldoWebservice extends Webservice
 			throw new FailedRequestException();
 		}
 
-		if (isset($json['results'])) {
-			if ($all && count($json['results']) === self::MAX_ITEMS_PER_PAGE) {
-				$json = $this->_sendRequest($query, $parameters, $all, ++$page, $limit, $json);
-			}
-
-			$json['results'] = array_merge($prev_json['results'] ?? [], $json['results']);
-		}
-
 		return $json;
 	}
 
@@ -230,7 +329,7 @@ class SoldoWebservice extends Webservice
 	 * 
 	 * @return Resource[]
 	 */
-	protected function _paginateResults(Query $query, array $results)
+	private function _paginateResults(Query $query, array $results)
 	{
 		$limit = $query->clause('limit');
 		$page = $query->clause('page') ?? 1;
@@ -244,61 +343,5 @@ class SoldoWebservice extends Webservice
 		$offset = ($page - 1) * $limit;
 
 		return array_slice($results, $offset, $limit);
-	}
-
-	/**
-	 * Generates a fingerprint based on the given parameters
-	 * 
-	 * @param string[] $fingerprint_order The fingerprint order to use.
-	 * @param array $parameters The GET parameters.
-	 * @param string $token The token.
-	 * 
-	 * @return string
-	 * 
-	 * @link https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#advanced-authentication
-	 */
-	private function _generateFingerprint(array $fingerprint_order, array $parameters, string $token)
-	{
-		$data = $token;
-
-		if (!empty($fingerprint_order) && !empty($parameters)) {
-			foreach (array_reverse(array_values($fingerprint_order)) as $parameter) {
-				if (isset($parameters[$parameter]) && !empty($parameters[$parameter])) {
-					$data = $parameters[$parameter] . $data;
-				}
-			}
-		}
-
-		return hash('sha512', $data);
-	}
-
-	/**
-	 * Signs the given fingerprint with the given private key
-	 * 
-	 * @param string $fingerprint The fingerprint to sign.
-	 * @param string $private_key The RSA private key shared with Soldo, encoded
-	 * in Base64.
-	 * 
-	 * @return string
-	 * 
-	 * @link https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#advanced-authentication
-	 */
-	private function _generateFingerprintSignature(string $fingerprint, string $private_key)
-	{
-		$private_key_resource = openssl_pkey_get_private($private_key);
-
-		if (!$private_key_resource) {
-			throw new InvalidFingerprintException('Could not retrieve the private key needed for the advanced authentication');
-		}
-
-		$fingerprint_signature = '';
-		if (openssl_sign($fingerprint, $fingerprint_signature, $private_key_resource, OPENSSL_ALGO_SHA512)) {
-			$base64_fingerprint_signature = base64_encode($fingerprint_signature);
-			openssl_free_key($private_key_resource);
-
-			return $base64_fingerprint_signature;
-		} else {
-			throw new InvalidFingerprintException('Could not generate the signature for the private key needed for the advanced authentication');
-		}
 	}
 }

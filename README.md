@@ -61,7 +61,7 @@ return [
 ];
 ```
 
-The _token_ and _private_key_ items are optional, but they are both needed if you need to make requests where the [advanced authentication](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#advanced-authentication) is required.
+The _token_ and _private_key_ items are optional, but they are both needed if you need to make requests where the [advanced authentication](https://developer.soldo.com/docs/advanced-authentication) is required.
 
 Examples:
 
@@ -105,24 +105,26 @@ return [
 
 The following Soldo resources are currently supported:
 
-- [Addresses](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#addresses);
-- [Cards](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#cards);
-  <!-- - [Company](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#company); -->
-- [Employees](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#users);
-- [Groups](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#groups);
-- [Orders](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#orders);
-- [Roles](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#permissions);
-- [Subscriptions](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#subscriptions);
-- [Transactions](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#transactions);
-- [Vehicles](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#vehicles);
-- [Wallets](https://developer.soldo.com/v2/f073ovxenbeb2jesx2oif1u2i3awgkyk.html#wallets).
+- [Addresses](https://developer.soldo.com/reference/addresse-search);
+- [Cards](https://developer.soldo.com/reference/card-search);
+  <!-- - [Company](https://developer.soldo.com/reference/company-get); -->
+- [Employees](https://developer.soldo.com/reference/user-search);
+- [Groups](https://developer.soldo.com/reference/group-search);
+- [Orders](https://developer.soldo.com/reference/order-search);
+- [Roles](https://developer.soldo.com/reference/roles-list);
+- [Subscriptions](https://developer.soldo.com/reference/subscription-search);
+- [Transactions](https://developer.soldo.com/reference/transaction-search);
+- [Vehicles](https://developer.soldo.com/reference/vehicle-search);
+- [Wallets](https://developer.soldo.com/reference/wallet-search).
+
+> **Note**: For all the resources listed above, **only read queries are currently supported, except for [internal transfers](#internal-transfers)**.
+
+### Reading
 
 The following code shows an example for the _Card_ resource:
 
 ```php
 namespace App\Controller;
-
-use Cake\Event\Event;
 
 /**
  * ...
@@ -208,4 +210,65 @@ object(Muffin\Webservice\Model\Resource)[2555]
       empty
 ```
 
-> **Note**: Only read queries are currently supported.
+### Internal transfers
+
+The only non-reading request currently supported by this plugin are [internal transfers](https://developer.soldo.com/reference/wallet-internal-transfer).
+
+The following code shows an example on how to make one:
+
+```php
+namespace App\Controller;
+
+/**
+ * ...
+ *
+ * @property \Soldo\Model\Endpoint\TransfersEndpoint $Transfers
+ */
+class WalletsController extends AppController
+{
+    public function initialize()
+    {
+        $this->loadModel('Soldo/Soldo.Transfers', 'Endpoint');
+    }
+
+    public function add()
+    {
+        $transfer = $this->Transfers->newEntity([
+            'fromWalletId' => '288ae0a2-4d53-4d3f-b8f9-63cbe3b06429',
+            'toWalletId' => '655192d7-80eb-4018-a9d3-2b9843aa4a64',
+            'amount' => 10,
+            'currencyCode' => 'EUR'
+        ]);
+
+        $result = $this->Transfers->save($transfer);
+    }
+}
+```
+
+`$result` will look like this:
+
+```php
+object(Muffin\Webservice\Model\Resource)[1319]
+  public 'amount' => int 10
+  public 'currency' => string 'EUR' (length=3)
+  public 'datetime' => string '2024-03-01T07:36:29.509Z' (length=24)
+  public 'from_wallet' =>
+    array (size=7)
+      'id' => string '288ae0a2-4d53-4d3f-b8f9-63cbe3b06429' (length=36)
+      'name' => string 'Foo' (length=3)
+      'currency_code' => string 'EUR' (length=3)
+      'available_amount' => float 90
+      'blocked_amount' => float 0
+      'primary_user_type' => string 'main' (length=4)
+      'visible' => boolean true
+  public 'to_wallet' =>
+    array (size=8)
+      'id' => string '655192d7-80eb-4018-a9d3-2b9843aa4a64' (length=36)
+      'name' => string 'Bar' (length=3)
+      'currency_code' => string 'EUR' (length=3)
+      'available_amount' => float 10
+      'blocked_amount' => float 0
+      'primary_user_type' => string 'employee' (length=8)
+      'primary_user_public_id' => string 'ABCD1234-000000' (length=15)
+      'visible' => boolean true
+```
