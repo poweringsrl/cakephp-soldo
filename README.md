@@ -272,3 +272,45 @@ object(Muffin\Webservice\Model\Resource)[1319]
       'primary_user_public_id' => string 'ABCD1234-000000' (length=15)
       'visible' => boolean true
 ```
+
+### Decrypting encrypted data
+
+There are cases in which the data returned by Soldo is encrypted. In case you need to decrypt them, this plugin has a specific static function that allows you to do so.
+
+Below is an example:
+
+```php
+namespace App\Controller;
+
+use Soldo\Utility\Fingerprint;
+
+/**
+ * ...
+ *
+ * @property \Soldo\Model\Endpoint\CardsEndpoint $Cards
+ */
+class CardsController extends AppController
+{
+    public function initialize()
+    {
+        $this->loadModel('Soldo/Soldo.Cards', 'Endpoint');
+    }
+
+    public function index()
+    {
+        $card = $this->Cards->get('ef12ee12-5cfa-4175-b7e6-665d112aea0e', [
+            'conditions' => [
+                'showSensitiveData' => 'true',
+            ]
+        ]);
+
+        $decrypted_full_pan = Fingerprint::decrypt($card->sensitive_data['encrypted_full_pan']);
+    }
+}
+```
+
+`$decrypted_full_pan` will look like this:
+
+```php
+'0123450000006789' (length=16)
+```

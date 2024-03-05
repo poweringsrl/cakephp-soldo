@@ -3,6 +3,7 @@
 namespace Soldo\Utility;
 
 use Soldo\Error\InvalidFingerprintException;
+use Soldo\Webservice\Driver\Soldo;
 
 class Fingerprint
 {
@@ -49,7 +50,7 @@ class Fingerprint
         $private_key_resource = openssl_pkey_get_private($private_key);
 
         if (!$private_key_resource) {
-            throw new InvalidFingerprintException('Could not retrieve the private key needed for the advanced authentication');
+            throw new InvalidFingerprintException('Could not retrieve the private key needed for signing the fingerprint');
         }
 
         $fingerprint_signature = '';
@@ -59,7 +60,65 @@ class Fingerprint
 
             return $base64_fingerprint_signature;
         } else {
-            throw new InvalidFingerprintException('Could not generate the signature for the private key needed for the advanced authentication');
+            throw new InvalidFingerprintException('Could not generate the signature for the private key needed for signing the fingerprint');
         }
+    }
+
+    /**
+     * Decrypts the ciphertext using the private key stored in the cache or the
+     * one given as a parameter
+     * 
+     * @param string $fingerprint The ciphertext to decrypt.
+     * @param string $private_key The RSA private key to use to decrypt the
+     * ciphertext, encoded in Base64.
+     * 
+     * @return string
+     * 
+     * @link https://developer.soldo.com/docs/advanced-authentication
+     */
+    public static function decrypt(string $ciphertext, string $private_key = null)
+    {
+        try {
+            // In case the given ciphertext is encoded in Base64, it decodes it
+            $decoded_ciphertext = base64_decode($ciphertext, true);
+            if ($decoded_ciphertext !== false) {
+                $encoded_ciphertext = base64_encode($decoded_ciphertext);
+
+                if ($ciphertext === $encoded_ciphertext) {
+                    $ciphertext = $decoded_ciphertext;
+                }
+            }
+
+            if (!$private_key) {
+                $private_key = \Cake\Cache\Cache::read(Soldo::PRIVATE_KEY_CACHE_KEY);
+            }
+
+            if (!is_string($private_key)) {
+                throw new InvalidFingerprintException('Could not retrieve the private key needed for decrypting the ciphertext');
+            }
+
+            $private_key = base64_decode($private_key);
+
+            if (!is_string($private_key)) {
+                throw new InvalidFingerprintException('Could not decode the private key from Base64 needed for decrypting the ciphertext');
+            }
+
+            /** @var \phpseclib3\Crypt\RSA\PrivateKey $rsa */
+            $rsa = \phpseclib3\Crypt\PublicKeyLoader::load($private_key);
+
+            $rsa->withPadding(\phpseclib3\Crypt\RSA::ENCRYPTION_OAEP);
+            $rsa->withMGFHash('sha256');
+            $rsa->withHash('sha256');
+
+            $decrypted_ciphertext = $rsa->decrypt($ciphertext);
+
+            if (!is_string($decrypted_ciphertext)) {
+                throw new InvalidFingerprintException('Could not decrypt the ciphertext');
+            }
+        } catch (\Exception $e) {
+            throw new InvalidFingerprintException('Error while decrypting the ciphertext');
+        }
+
+        return $decrypted_ciphertext;
     }
 }

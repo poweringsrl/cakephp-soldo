@@ -10,6 +10,17 @@ use Soldo\Error\NoStandardCredentialsException;
 class Soldo extends AbstractDriver
 {
 	/**
+	 * The cache key used to store the private key
+	 * 
+	 * Currently this is only used by the decrypting function.
+	 *
+	 * @var string
+	 * 
+	 * @see \Soldo\Utility\Fingerprint::decrypt
+	 */
+	public const PRIVATE_KEY_CACHE_KEY = 'soldo_private_key';
+
+	/**
 	 * The API host when using Soldo in production
 	 *
 	 * @var string
@@ -54,6 +65,8 @@ class Soldo extends AbstractDriver
 
 	public function initialize()
 	{
+		\Cake\Cache\Cache::write(self::PRIVATE_KEY_CACHE_KEY, $this->getConfig('private_key'));
+
 		$this->setClient(new \Cake\Http\Client($this->getClientConfig($this->isAutologinEnabled())));
 	}
 
