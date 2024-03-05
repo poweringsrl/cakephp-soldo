@@ -68,7 +68,7 @@ class Fingerprint
      * Decrypts the ciphertext using the private key stored in the cache or the
      * one given as a parameter
      * 
-     * @param string $fingerprint The ciphertext to decrypt.
+     * @param string $ciphertext The ciphertext to decrypt.
      * @param string $private_key The RSA private key to use to decrypt the
      * ciphertext, encoded in Base64.
      * 
