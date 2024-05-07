@@ -36,8 +36,6 @@ if (!defined('SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY')) {
     define('SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY', 'soldo_access_token');
 }
 
-Plugin::load('Muffin/Webservice', ['bootstrap' => true]);
-
 if (Cache::getConfig(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY)) {
     Cache::drop(SOLDO_ACCESS_TOKEN_CACHE_CONFIG_KEY);
 }
