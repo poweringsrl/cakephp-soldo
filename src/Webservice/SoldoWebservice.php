@@ -240,13 +240,13 @@ class SoldoWebservice extends Webservice
 	 * 
 	 * @return array The response body.
 	 */
-	protected function _putRequest(Query $query, string $url, array $data)
+	protected function _putRequest(Query $query, string $url, array $parameters)
 	{
-		$headers = $this->_getHeaders($query, $data);
+		$headers = $this->_getHeaders($query, $parameters);
 
 		$response = $this->getDriver()
 			->getClient()
-			->put($url, $data, $headers ? ['headers' => $headers] : []);
+			->put($url, $parameters, $headers ? ['headers' => $headers] : []);
 
 		$json = $this->_parseResponse($response);
 
