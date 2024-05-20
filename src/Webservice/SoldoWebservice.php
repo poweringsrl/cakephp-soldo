@@ -107,6 +107,16 @@ class SoldoWebservice extends Webservice
 			$parameters['props'] = $field;
 		}
 
+		$fixed_parameters = [];
+		foreach ($parameters as $parameter => $value) {
+			$trimmed_parameter = trim($parameter);
+			if (substr_compare($trimmed_parameter, ' IN', -3) === 0) {
+				$trimmed_parameter = substr($trimmed_parameter, 0, -3);
+			}
+
+			$fixed_parameters[$trimmed_parameter] = $value;
+		}
+
 		$limit = $query->clause('limit');
 
 		// In CakePHP pages are expected to start from 1, while Soldo expect pages starting from 0
@@ -117,8 +127,8 @@ class SoldoWebservice extends Webservice
 		$url = $this->_baseUrl();
 
 		$primary_key = $query->endpoint()->getPrimaryKey();
-		if ($primary_key && isset($parameters[$primary_key])) {
-			$path = $this->nestedResource(['id' => $parameters[$primary_key]]);
+		if ($primary_key && isset($fixed_parameters[$primary_key])) {
+			$path = $this->nestedResource(['id' => $fixed_parameters[$primary_key]]);
 
 			if (is_string($path)) {
 				$url .= $path;
@@ -126,8 +136,8 @@ class SoldoWebservice extends Webservice
 		}
 
 		$json = $all
-			? $this->_getRequest($query, $url, $parameters, $all)
-			: $this->_getRequest($query, $url, $parameters, $all, $page, $limit);
+			? $this->_getRequest($query, $url, $fixed_parameters, $all)
+			: $this->_getRequest($query, $url, $fixed_parameters, $all, $page, $limit);
 
 		$results = isset($json['results']) ? $json['results'] : [$json];
 
@@ -213,10 +223,13 @@ class SoldoWebservice extends Webservice
 		$parameters['s'] = $all ? self::MAX_ITEMS_PER_PAGE : $limit;
 
 		$headers = $this->_getHeaders($query, $parameters);
+		$url_query = $this->_buildQuery($parameters);
+
+		$url = empty($query) ? $url : $url . '?' . $url_query;
 
 		$response = $this->getDriver()
 			->getClient()
-			->get($url, $parameters, $headers ? ['headers' => $headers] : []);
+			->get($url, [], $headers ? ['headers' => $headers] : []);
 
 		$json = $this->_parseResponse($response);
 
@@ -291,6 +304,39 @@ class SoldoWebservice extends Webservice
 		}
 
 		return $headers;
+	}
+
+	/**
+	 * Constructs a query string from an array of parameters
+	 *
+	 * This method is necessary because the built-in PHP function
+	 * `http_build_query` and the HTTP client used in this plugin both
+	 * concatenate "[]" to parameter names when the value is an array. However,
+	 * the Soldo API does not accept square brackets for parameters that have an
+	 * array as a value.
+	 * 
+	 * @param array $parameters
+	 * 
+	 * @return string A URL-encoded query string without square brackets for
+	 * array parameters.
+	 */
+	private function _buildQuery(array $parameters)
+	{
+		$query = [];
+
+		if (!empty($parameters)) {
+			foreach ($parameters as $key => $value) {
+				if (is_array($value)) {
+					foreach ($value as $subValue) {
+						$query[] = urlencode($key) . '=' . urlencode($subValue);
+					}
+				} else {
+					$query[] = urlencode($key) . '=' . urlencode($value);
+				}
+			}
+		}
+
+		return implode('&', $query);
 	}
 
 	/**

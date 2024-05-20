@@ -26,7 +26,7 @@ class Fingerprint
         if (!empty($fingerprint_order) && !empty($parameters)) {
             foreach (array_reverse(array_values($fingerprint_order)) as $parameter) {
                 if (isset($parameters[$parameter]) && !empty($parameters[$parameter])) {
-                    $data = $parameters[$parameter] . $data;
+                    $data = (is_array($parameters[$parameter]) ? implode('', $parameters[$parameter]) : $parameters[$parameter]) . $data;
                 }
             }
         }
