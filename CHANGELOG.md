@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [Version 1.3.0][v1.3.0] - 2024-09-09
+
+### Added
+
+- Support for array query parameters.
+
+### Changed
+
+- Replaced deprecated way of loading plugins.
+
+### Fixed
+
+- Requesting results without specifying pagination would return an error if the results spanned multiple pages.
+
 ## [Version 1.2.1][v1.2.1] - 2024-03-05
 
 ### Added
@@ -47,7 +61,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Initial release
 
-[Unreleased]: https://github.com/poweringsrl/cakephp-soldo/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/poweringsrl/cakephp-soldo/compare/v1.3.0...HEAD
+[v1.3.0]: https://github.com/poweringsrl/cakephp-soldo/compare/v1.2.1...v1.3.0
 [v1.2.1]: https://github.com/poweringsrl/cakephp-soldo/compare/v1.2.0...v1.2.1
 [v1.2.0]: https://github.com/poweringsrl/cakephp-soldo/compare/v1.1.0...v1.2.0
 [v1.1.0]: https://github.com/poweringsrl/cakephp-soldo/compare/v1.0.0...v1.1.0
