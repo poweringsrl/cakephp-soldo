@@ -219,12 +219,13 @@ class SoldoWebservice extends Webservice
 		int $limit = self::MAX_ITEMS_PER_PAGE,
 		array $prev_json = []
 	) {
-		$parameters['p'] = $all ? 0 : $page;
-		$parameters['s'] = $all ? self::MAX_ITEMS_PER_PAGE : $limit;
+		$parameters['p'] = $page;
+		$parameters['s'] = $limit;
 
 		$headers = $this->_getHeaders($query, $parameters);
 		$url_query = $this->_buildQuery($parameters);
 
+		$url_no_params = $url;
 		$url = empty($query) ? $url : $url . '?' . $url_query;
 
 		$response = $this->getDriver()
@@ -235,7 +236,7 @@ class SoldoWebservice extends Webservice
 
 		if (isset($json['results'])) {
 			if ($all && count($json['results']) === self::MAX_ITEMS_PER_PAGE) {
-				$json = $this->_getRequest($query, $url, $parameters, $all, ++$page, $limit, $json);
+				$json = $this->_getRequest($query, $url_no_params, $parameters, $all, ++$page, $limit, $json);
 			}
 
 			$json['results'] = array_merge($prev_json['results'] ?? [], $json['results']);
